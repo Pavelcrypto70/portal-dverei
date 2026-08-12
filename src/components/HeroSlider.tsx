@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useEffect, useState } from "react";
 import { brand, heroSlides, home } from "@/content/site";
+import { MediaImage } from "@/components/MediaImage";
 import { useQuiz } from "@/components/QuizModal";
 
 export function HeroSlider() {
@@ -37,7 +37,7 @@ export function HeroSlider() {
         <div className="flex h-full">
           {heroSlides.map((s, i) => (
             <div key={s.id} className="relative min-w-0 flex-[0_0_100%]">
-              <Image
+              <MediaImage
                 src={s.image}
                 alt=""
                 fill

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { MediaImage } from "@/components/MediaImage";
 import { formatPrice, productImages, type Product } from "@/content/site";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: Product }) {
         href={`/product/${product.slug}`}
         className="relative block aspect-[4/5] overflow-hidden bg-[#d7dbe3]"
       >
-        <Image
+        <MediaImage
           src={img}
           alt={product.name}
           fill

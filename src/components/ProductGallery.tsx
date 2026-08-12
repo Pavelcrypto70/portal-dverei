@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { productGalleries, productImages } from "@/content/site";
+import { MediaImage } from "@/components/MediaImage";
 
 export function ProductGallery({ productId, name }: { productId: string; name: string }) {
   const images =
@@ -16,7 +16,7 @@ export function ProductGallery({ productId, name }: { productId: string; name: s
   return (
     <div>
       <div className="relative min-h-[420px] overflow-hidden bg-[#d7dbe3] md:min-h-[560px]">
-        <Image
+        <MediaImage
           src={images[active]}
           alt={name}
           fill
@@ -35,7 +35,7 @@ export function ProductGallery({ productId, name }: { productId: string; name: s
               i === active ? "ring-2 ring-[var(--accent)]" : "opacity-80 hover:opacity-100"
             }`}
           >
-            <Image src={src} alt="" fill className="object-cover" sizes="160px" />
+            <MediaImage src={src} alt="" fill className="object-cover" sizes="160px" />
           </button>
         ))}
       </div>

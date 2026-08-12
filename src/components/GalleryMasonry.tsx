@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { galleryImages } from "@/content/site";
+import { MediaImage } from "@/components/MediaImage";
 import { Reveal } from "@/components/Reveal";
 
 export function GalleryMasonry({
@@ -41,7 +41,7 @@ export function GalleryMasonry({
               onClick={() => setActive(src)}
               aria-label="Открыть фото"
             >
-              <Image
+              <MediaImage
                 src={src}
                 alt=""
                 fill
@@ -69,7 +69,7 @@ export function GalleryMasonry({
             Закрыть
           </button>
           <div className="relative h-[75vh] w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
-            <Image src={active} alt="" fill className="object-contain" sizes="100vw" />
+            <MediaImage src={active} alt="" fill className="object-contain" sizes="100vw" />
           </div>
         </div>
       ) : null}

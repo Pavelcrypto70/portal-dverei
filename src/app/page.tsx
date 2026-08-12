@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { BrandMarquee } from "@/components/BrandMarquee";
 import { GalleryMasonry } from "@/components/GalleryMasonry";
 import { HeroSlider } from "@/components/HeroSlider";
 import { MeasureForm } from "@/components/MeasureForm";
+import { MediaImage } from "@/components/MediaImage";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { VisualRails } from "@/components/VisualRails";
@@ -33,7 +33,7 @@ export default function HomePage() {
             {home.categoryFork.map((c, i) => (
               <Reveal key={c.href} delay={i * 0.08}>
                 <Link href={c.href} className="group relative block min-h-[380px] overflow-hidden md:min-h-[460px]">
-                  <Image
+                  <MediaImage
                     src={c.image}
                     alt=""
                     fill
@@ -117,7 +117,7 @@ export default function HomePage() {
               href="/promotions"
               className="group relative min-h-[320px] overflow-hidden"
             >
-              <Image
+              <MediaImage
                 src={i === 0 ? homeMedia.promoA : homeMedia.promoB}
                 alt=""
                 fill
@@ -183,7 +183,7 @@ export default function HomePage() {
       </section>
 
       <section className="relative min-h-[480px] overflow-hidden">
-        <Image
+        <MediaImage
           src={homeMedia.help}
           alt=""
           fill
@@ -236,7 +236,7 @@ export default function HomePage() {
             <div className="mt-8 grid grid-cols-3 gap-2">
               {homeMedia.measure.map((src) => (
                 <div key={src} className="relative aspect-square overflow-hidden">
-                  <Image src={src} alt="" fill className="object-cover" sizes="120px" />
+                  <MediaImage src={src} alt="" fill className="object-cover" sizes="120px" />
                 </div>
               ))}
             </div>

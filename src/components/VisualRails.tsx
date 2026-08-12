@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { finishes, visualCategories } from "@/content/site";
+import { MediaImage } from "@/components/MediaImage";
 import { Reveal } from "@/components/Reveal";
 
 export function VisualRails() {
@@ -20,7 +20,7 @@ export function VisualRails() {
             {visualCategories.map((c, i) => (
               <Reveal key={c.href} delay={i * 0.05} className="shrink-0">
                 <Link href={c.href} className="group relative block h-[220px] w-[180px] overflow-hidden md:h-[260px] md:w-[210px]">
-                  <Image
+                  <MediaImage
                     src={c.image}
                     alt={c.label}
                     fill
@@ -49,7 +49,7 @@ export function VisualRails() {
               <Reveal key={f.name} delay={i * 0.04}>
                 <Link href="/catalog/interior" className="group block">
                   <div className="relative aspect-square overflow-hidden">
-                    <Image
+                    <MediaImage
                       src={f.image}
                       alt={f.name}
                       fill

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/MediaImage";
 import { brand, contactsPage, salons } from "@/content/site";
 
 const salonPhotos = [
@@ -11,7 +11,7 @@ export default function ContactsPage() {
   return (
     <div className="pt-[72px]">
       <div className="relative min-h-[280px] overflow-hidden">
-        <Image
+        <MediaImage
           src="/media/hero-install.png"
           alt=""
           fill
@@ -34,7 +34,7 @@ export default function ContactsPage() {
           {salons.map((s, i) => (
             <article key={s.id}>
               <div className="relative mb-4 aspect-[4/3] overflow-hidden">
-                <Image src={salonPhotos[i]} alt="" fill className="object-cover" sizes="33vw" />
+                <MediaImage src={salonPhotos[i]} alt="" fill className="object-cover" sizes="33vw" />
               </div>
               <h2 className="text-xl font-semibold">{s.name}</h2>
               <p className="mt-2 text-sm text-[var(--mute)]">{s.address}</p>
