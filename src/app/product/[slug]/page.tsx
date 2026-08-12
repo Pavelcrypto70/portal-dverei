@@ -5,20 +5,21 @@ import { OneClickForm } from "@/components/OneClickForm";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductCard } from "@/components/ProductCard";
 
+export function generateStaticParams() {
+  return products.map((p) => ({ slug: p.slug }));
+}
+
 export default async function ProductPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await params;
-  const sp = await searchParams;
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
 
   const total = kitTotal(product);
-  const showBuy = sp.buy === "1";
+  const showBuy = false;
   const related = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);

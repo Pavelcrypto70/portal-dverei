@@ -8,29 +8,25 @@ const labels: Record<string, string> = {
   hardware: "Фурнитура",
 };
 
+export function generateStaticParams() {
+  return [
+    { category: "interior" },
+    { category: "entrance" },
+    { category: "hardware" },
+  ];
+}
+
 export default async function CatalogPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ category: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { category } = await params;
-  const sp = await searchParams;
-  const q = typeof sp.q === "string" ? sp.q.toLowerCase() : "";
   const cat = (["interior", "entrance", "hardware"].includes(category)
     ? category
     : "interior") as "interior" | "entrance" | "hardware";
 
-  let list = products.filter((p) => p.category === cat);
-  if (q) {
-    list = list.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.finish.toLowerCase().includes(q) ||
-        p.style.toLowerCase().includes(q),
-    );
-  }
+  const list = products.filter((p) => p.category === cat);
 
   const facets = cat === "entrance"
     ? ["Назначение", "Конструкция", "Панель", "Цена"]

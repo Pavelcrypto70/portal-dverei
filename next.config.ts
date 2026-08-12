@@ -1,10 +1,15 @@
 import type { NextConfig } from "next";
 
+const repo = "portal-dverei";
+const isGhPages = process.env.GITHUB_PAGES === "true";
+
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: process.cwd(),
-  },
+  output: "export",
+  trailingSlash: true,
+  basePath: isGhPages ? `/${repo}` : "",
+  assetPrefix: isGhPages ? `/${repo}/` : undefined,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
