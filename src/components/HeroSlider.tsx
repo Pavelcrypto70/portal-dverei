@@ -4,7 +4,8 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useEffect, useState } from "react";
-import { brand, heroSlides, home } from "@/content/site";
+import { heroSlides, home } from "@/content/site";
+import { BrandMark } from "@/components/BrandMark";
 import { MediaImage } from "@/components/MediaImage";
 import { useQuiz } from "@/components/QuizModal";
 
@@ -55,8 +56,11 @@ export function HeroSlider() {
 
       <div className="relative z-[1] flex h-full flex-col justify-end pb-16 pt-[96px]">
         <div className="wrap">
-          <p className="anim-up display text-[clamp(3.4rem,12vw,8.5rem)] font-extrabold leading-[0.85] text-[var(--brand)] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
-            {brand.name}
+          <p className="anim-up display text-[clamp(3.4rem,12vw,8.5rem)] font-extrabold leading-[0.85] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+            <BrandMark
+              mainClassName="text-[var(--brand)]"
+              tldClassName="text-[#9aa0a8]"
+            />
           </p>
           <h1 className="anim-up anim-up-2 mt-5 max-w-[16ch] whitespace-pre-line text-[clamp(1.6rem,3.4vw,2.6rem)] font-semibold leading-[1.1] text-white">
             {home.h1}

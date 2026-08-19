@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { brand, footer, salons } from "@/content/site";
+import { BrandMark } from "@/components/BrandMark";
 
 function goTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -18,7 +19,7 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="display inline-block text-4xl font-extrabold transition hover:text-[var(--brand)]"
+            className="display inline-block text-4xl font-extrabold transition hover:opacity-90"
             onClick={(e) => {
               if (pathname === "/" || pathname === "") {
                 e.preventDefault();
@@ -29,7 +30,7 @@ export function Footer() {
               requestAnimationFrame(goTop);
             }}
           >
-            {brand.name}
+            <BrandMark mainClassName="text-[var(--brand)]" tldClassName="text-[#9aa0a8]" />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{footer.about}</p>
           <a href={brand.phoneMainHref} className="mt-6 inline-block text-xl font-bold">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { brand, nav, salons } from "@/content/site";
+import { BrandMark } from "@/components/BrandMark";
 
 const secondaryLabels = new Set(["О нас", "Контакты"]);
 
@@ -65,13 +66,12 @@ export function Header() {
           href="/"
           onClick={goHomeTop}
           aria-label="Наверх на главную"
-          className={`display shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight sm:text-[1.05rem] xl:text-[1.2rem] ${
-            ink
-              ? "text-[var(--brand-deep)]"
-              : "text-[var(--brand)] drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
-          }`}
+          className="display shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight drop-shadow-[0_1px_10px_rgba(0,0,0,0.35)] sm:text-[1.05rem] xl:text-[1.2rem]"
         >
-          {brand.name}
+          <BrandMark
+            mainClassName="text-[var(--brand)]"
+            tldClassName="text-[#9aa0a8]"
+          />
         </Link>
 
         <nav className="relative hidden min-w-0 flex-1 items-center justify-start gap-0 overflow-hidden xl:flex">
