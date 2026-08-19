@@ -41,9 +41,12 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="wrap flex items-center justify-between gap-4 pb-8 text-xs text-white/35">
+        <div className="wrap flex items-center justify-between gap-4 pb-8 text-xs text-white/45">
           <span>{footer.legal}</span>
-          <Link href="/admin/login" className="text-white/25 transition hover:text-white/55">
+          <Link
+            href="/admin/login"
+            className="shrink-0 text-white/50 underline-offset-2 hover:text-white hover:underline"
+          >
             Вход
           </Link>
         </div>
