@@ -17,7 +17,7 @@ export function StickyActions() {
       </button>
       <Link
         href="/measure"
-        className="btn btn-accent shadow-[0_12px_40px_rgba(15,118,110,0.35)]"
+        className="btn btn-accent shadow-[0_12px_40px_rgba(251,190,7,0.4)]"
       >
         Замер
       </Link>

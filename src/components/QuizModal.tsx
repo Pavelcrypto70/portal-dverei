@@ -80,7 +80,7 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
                       <button
                         key={opt}
                         type="button"
-                        className="border border-[var(--line)] px-4 py-3 text-left text-sm hover:border-[var(--accent)] hover:bg-[rgba(15,118,110,0.06)]"
+                        className="border border-[var(--line)] px-4 py-3 text-left text-sm hover:border-[var(--accent)] hover:bg-[rgba(251,190,7,0.1)]"
                         onClick={() => {
                           setAnswers((a) => ({ ...a, [current.id]: opt }));
                           if (step + 1 >= quiz.steps.length) setDone(true);
