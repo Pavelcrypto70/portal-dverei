@@ -17,6 +17,14 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 1280) setMobile(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const enter = (label: string) => {
     if (timer.current) clearTimeout(timer.current);
     setOpen(label);
@@ -25,35 +33,37 @@ export function Header() {
     timer.current = setTimeout(() => setOpen(null), 140);
   };
 
+  const ink = scrolled || mobile;
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || mobile
+        ink
           ? "border-b border-[var(--line)] bg-[rgba(244,245,247,0.92)] backdrop-blur-xl"
           : "bg-transparent"
       }`}
     >
-      <div className="wrap flex h-[72px] items-center gap-4">
+      <div className="wrap flex h-[72px] items-center gap-3 xl:gap-4">
         <Link
           href="/"
-          className={`display text-[1.55rem] font-extrabold tracking-tight ${
-            scrolled || mobile ? "text-[var(--ink)]" : "text-white"
+          className={`display shrink-0 text-[1.35rem] font-extrabold tracking-tight xl:text-[1.55rem] ${
+            ink ? "text-[var(--ink)]" : "text-white"
           }`}
         >
           {brand.name}
         </Link>
 
-        <nav className="relative ml-4 hidden items-center gap-1 lg:flex">
+        <nav className="relative ml-1 hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
           {nav.map((item) => (
             <div
               key={item.label}
-              className="relative"
+              className="relative shrink-0"
               onMouseEnter={() => ("columns" in item ? enter(item.label) : setOpen(null))}
               onMouseLeave={leave}
             >
               <Link
                 href={item.href}
-                className={`px-3 py-2 text-sm font-medium transition ${
+                className={`block whitespace-nowrap px-2 py-2 text-[13px] font-medium leading-none transition 2xl:px-2.5 2xl:text-sm ${
                   scrolled
                     ? "text-[var(--ink-2)] hover:text-[var(--ink)]"
                     : "text-white/85 hover:text-white"
@@ -94,30 +104,38 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
-          <div className="hidden text-right xl:block">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="hidden flex-col items-end justify-center leading-none xl:flex">
             <a
               href={brand.phoneMainHref}
-              className={`block text-sm font-bold ${scrolled || mobile ? "text-[var(--ink)]" : "text-white"}`}
+              className={`whitespace-nowrap text-sm font-bold leading-none ${
+                ink ? "text-[var(--ink)]" : "text-white"
+              }`}
             >
               {brand.phoneMain}
             </a>
-            <p className={`text-[11px] ${scrolled || mobile ? "text-[var(--mute)]" : "text-white/65"}`}>
+            <p
+              className={`mt-1.5 whitespace-nowrap text-[11px] leading-none ${
+                ink ? "text-[var(--mute)]" : "text-white/65"
+              }`}
+            >
               {salons.length} салона · {brand.city}
             </p>
           </div>
           <Link
             href="/measure"
-            className={`btn hidden sm:inline-flex ${scrolled || mobile ? "btn-accent" : "bg-white text-[var(--ink)]"}`}
+            className={`btn !min-h-10 !px-3.5 sm:inline-flex ${
+              ink ? "btn-accent" : "bg-white text-[var(--ink)]"
+            } hidden sm:inline-flex`}
           >
             Замер
           </Link>
           <button
             type="button"
-            className={`btn !min-h-10 !px-3 lg:hidden ${
-              scrolled || mobile ? "btn-line" : "btn-line-light"
-            }`}
+            className={`btn !min-h-10 !px-3 xl:hidden ${ink ? "btn-line" : "btn-line-light"}`}
             onClick={() => setMobile((v) => !v)}
+            aria-expanded={mobile}
+            aria-label="Открыть меню"
           >
             Меню
           </button>
@@ -125,28 +143,41 @@ export function Header() {
       </div>
 
       {mobile ? (
-        <div className="border-t border-[var(--line)] bg-[var(--paper)] px-4 py-4 lg:hidden">
-          <div className="mb-4 space-y-1">
+        <div className="max-h-[calc(100svh-72px)] overflow-y-auto border-t border-[var(--line)] bg-[var(--paper)] px-4 py-4 xl:hidden">
+          <a
+            href={brand.phoneMainHref}
+            className="block text-base font-bold leading-none text-[var(--ink)]"
+          >
+            {brand.phoneMain}
+          </a>
+          <p className="mt-2 text-xs leading-none text-[var(--mute)]">
+            {salons.length} салона · {brand.city}
+          </p>
+          <div className="mt-5 space-y-1 border-t border-[var(--line)] pt-4">
             {salons.map((s) => (
-              <a key={s.id} href={s.phoneHref} className="block text-sm">
+              <a key={s.id} href={s.phoneHref} className="block py-1.5 text-sm leading-snug">
                 <span className="font-semibold">{s.phone}</span>
                 <span className="text-[var(--mute)]"> — {s.name}</span>
               </a>
             ))}
           </div>
-          <div className="grid gap-1">
+          <div className="mt-2 grid gap-0">
             {nav.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="border-b border-[var(--line)] py-3 text-base font-medium"
+                className="border-b border-[var(--line)] py-3 text-base font-medium leading-snug"
                 onClick={() => setMobile(false)}
               >
                 {item.label}
               </Link>
             ))}
           </div>
-          <Link href="/measure" className="btn btn-accent mt-4 w-full" onClick={() => setMobile(false)}>
+          <Link
+            href="/measure"
+            className="btn btn-accent mt-4 w-full"
+            onClick={() => setMobile(false)}
+          >
             Вызвать замерщика
           </Link>
         </div>

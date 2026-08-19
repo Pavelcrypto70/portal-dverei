@@ -198,7 +198,7 @@ export const nav = [
     ],
   },
   { label: "Акции", href: "/promotions" },
-  { label: "О магазине", href: "/about" },
+  { label: "О нас", href: "/about" },
   { label: "Контакты", href: "/contacts" },
 ];
 
