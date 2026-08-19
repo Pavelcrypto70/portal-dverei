@@ -49,7 +49,7 @@ export function ProductView({ slug }: { slug: string }) {
         <ProductGallery productId={product.id} name={product.name} />
         <div>
           {product.badge ? (
-            <span className="bg-[var(--ink)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+            <span className="bg-[var(--brand)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[var(--ink)]">
               {product.badge}
             </span>
           ) : null}

@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: Product }) {
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(8,10,14,0.62))] opacity-90 transition group-hover:opacity-100" />
         {product.badge ? (
-          <span className="absolute left-3 top-3 bg-[var(--ink)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+          <span className="absolute left-3 top-3 bg-[var(--brand)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[var(--ink)]">
             {product.badge}
           </span>
         ) : null}
