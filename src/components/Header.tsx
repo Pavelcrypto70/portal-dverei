@@ -63,11 +63,11 @@ export function Header() {
               </Link>
               {"columns" in item && open === item.label && item.columns ? (
                 <div
-                  className="absolute left-0 top-full z-50 mt-3 w-[560px] border border-[var(--line)] bg-[var(--paper)] p-6"
+                  className="absolute left-0 top-full z-50 mt-3 w-[min(560px,90vw)] border border-[var(--line)] bg-[var(--paper)] p-6"
                   onMouseEnter={() => enter(item.label)}
                   onMouseLeave={leave}
                 >
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
                     {item.columns.map((col) => (
                       <div key={col.title}>
                         <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">

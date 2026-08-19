@@ -1,15 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { MediaImage } from "@/components/MediaImage";
 import { formatPrice, productImages, type Product } from "@/content/site";
+import { saveCatalogReturn } from "@/lib/session-state";
 
 export function ProductCard({ product }: { product: Product }) {
-  const img =
-    productImages[product.id] ?? "/media/p-turin.png";
+  const img = productImages[product.id] ?? "/media/p-turin.png";
+  const href = `/item?slug=${encodeURIComponent(product.slug)}`;
+
+  const remember = () => {
+    if (typeof window === "undefined") return;
+    const path = `${window.location.pathname.replace(/^\/portal-dverei/, "")}${window.location.search}`;
+    if (path.includes("/catalog/")) saveCatalogReturn(path || `/catalog/${product.category}`);
+  };
 
   return (
     <article className="group flex h-full flex-col">
       <Link
-        href={`/product/${product.slug}`}
+        href={href}
+        onClick={remember}
         className="relative block aspect-[4/5] overflow-hidden bg-[#d7dbe3]"
       >
         <MediaImage
@@ -39,16 +49,17 @@ export function ProductCard({ product }: { product: Product }) {
           {product.style}
           {product.colorsExtra ? ` · +${product.colorsExtra} цвета` : ""}
         </p>
-        <Link href={`/product/${product.slug}`} className="mt-1 block text-lg font-semibold leading-tight">
+        <Link href={href} onClick={remember} className="mt-1 block text-lg font-semibold leading-tight">
           {product.name}
         </Link>
         <p className="mt-2 line-clamp-2 text-sm text-[var(--mute)]">{product.short}</p>
         <div className="mt-3 flex items-center justify-between gap-3">
-          <Link href={`/product/${product.slug}`} className="text-sm font-semibold text-[var(--accent)]">
+          <Link href={href} onClick={remember} className="text-sm font-semibold text-[var(--accent)]">
             Комплект
           </Link>
           <Link
-            href={`/product/${product.slug}?buy=1`}
+            href={`${href}#one-click`}
+            onClick={remember}
             className="text-sm font-semibold text-[var(--ink)] underline-offset-4 hover:underline"
           >
             1 клик

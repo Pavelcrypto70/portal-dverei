@@ -107,6 +107,67 @@ export const nav = [
     ],
   },
   {
+    label: "Полы",
+    href: "/catalog/flooring",
+    columns: [
+      {
+        title: "Тип",
+        links: [
+          { label: "Ламинат", href: "/catalog/flooring?type=laminate" },
+          { label: "Инженерная доска", href: "/catalog/flooring?type=engineered" },
+          { label: "SPC / кварцвинил", href: "/catalog/flooring?type=spc" },
+          { label: "Паркетная доска", href: "/catalog/flooring?type=parquet" },
+        ],
+      },
+      {
+        title: "Оттенок",
+        links: [
+          { label: "Светлый", href: "/catalog/flooring?tone=light" },
+          { label: "Натуральный", href: "/catalog/flooring?tone=natural" },
+          { label: "Тёмный", href: "/catalog/flooring?tone=dark" },
+        ],
+      },
+      {
+        title: "Класс",
+        links: [
+          { label: "33 класс", href: "/catalog/flooring?grade=33" },
+          { label: "34 класс", href: "/catalog/flooring?grade=34" },
+          { label: "Влагостойкий", href: "/catalog/flooring?grade=wet" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Бамбук",
+    href: "/catalog/bamboo",
+    columns: [
+      {
+        title: "Формат",
+        links: [
+          { label: "Стеновые панели", href: "/catalog/bamboo?type=wall" },
+          { label: "Рейки / ламели", href: "/catalog/bamboo?type=slat" },
+          { label: "Декор-плитка", href: "/catalog/bamboo?type=tile" },
+        ],
+      },
+      {
+        title: "Цвет",
+        links: [
+          { label: "Натуральный", href: "/catalog/bamboo?tone=natural" },
+          { label: "Карбон", href: "/catalog/bamboo?tone=carbon" },
+          { label: "Выбеленный", href: "/catalog/bamboo?tone=bleached" },
+        ],
+      },
+      {
+        title: "Монтаж",
+        links: [
+          { label: "Клей", href: "/catalog/bamboo?mount=glue" },
+          { label: "Система шип-паз", href: "/catalog/bamboo?mount=click" },
+          { label: "На обрешётку", href: "/catalog/bamboo?mount=batten" },
+        ],
+      },
+    ],
+  },
+  {
     label: "Фурнитура",
     href: "/catalog/hardware",
     columns: [
@@ -144,7 +205,8 @@ export const nav = [
 export const categoryRow = [
   { label: "Межкомнатные", href: "/catalog/interior", icon: "interior" },
   { label: "Входные", href: "/catalog/entrance", icon: "entrance" },
-  { label: "Перегородки", href: "/catalog/interior?type=partition", icon: "partition" },
+  { label: "Полы", href: "/catalog/flooring", icon: "flooring" },
+  { label: "Бамбук", href: "/catalog/bamboo", icon: "bamboo" },
   { label: "Фурнитура", href: "/catalog/hardware", icon: "hardware" },
   { label: "Замерщик", href: "/measure", icon: "measure" },
   { label: "Акции", href: "/promotions", icon: "promo" },
@@ -246,6 +308,18 @@ export const productImages: Record<string, string> = {
   "thermo-elite": "/media/p-thermo.png",
   handle: "/media/finish-graphite.png",
   lock: "/media/cat-mirror.png",
+  "floor-nordic": "/media/finish-white.png",
+  "floor-honey": "/media/finish-oak.png",
+  "floor-walnut": "/media/finish-graphite.png",
+  "floor-spc-stone": "/media/finish-mint.png",
+  "floor-spc-oak": "/media/finish-cappuccino.png",
+  "floor-engineered": "/media/g-extra-1.png",
+  "bamboo-natural": "/media/finish-oak.png",
+  "bamboo-carbon": "/media/finish-black.png",
+  "bamboo-bleached": "/media/finish-white.png",
+  "bamboo-slat": "/media/cat-partition.png",
+  "bamboo-slat-dark": "/media/finish-graphite.png",
+  "bamboo-tile": "/media/g-extra-2.png",
 };
 
 export const productGalleries: Record<string, string[]> = {
@@ -259,6 +333,18 @@ export const productGalleries: Record<string, string[]> = {
   "grand-ash": ["/media/p-grand.png", "/media/finish-oak.png", "/media/promo-2.png"],
   stroygost: ["/media/p-stroy.png", "/media/fork-entrance.png", "/media/hero-entrance.png"],
   "thermo-elite": ["/media/p-thermo.png", "/media/cat-thermo.png", "/media/hero-entrance.png"],
+  "floor-nordic": ["/media/finish-white.png", "/media/finish-oak.png", "/media/hero-finish.png"],
+  "floor-honey": ["/media/finish-oak.png", "/media/finish-cappuccino.png", "/media/g-extra-1.png"],
+  "floor-walnut": ["/media/finish-graphite.png", "/media/finish-black.png", "/media/promo-1.png"],
+  "floor-spc-stone": ["/media/finish-mint.png", "/media/finish-white.png", "/media/hero-showroom.png"],
+  "floor-spc-oak": ["/media/finish-cappuccino.png", "/media/finish-oak.png", "/media/g-extra-2.png"],
+  "floor-engineered": ["/media/g-extra-1.png", "/media/finish-oak.png", "/media/hero-finish.png"],
+  "bamboo-natural": ["/media/finish-oak.png", "/media/cat-partition.png", "/media/g-extra-2.png"],
+  "bamboo-carbon": ["/media/finish-black.png", "/media/finish-graphite.png", "/media/hero-hidden.png"],
+  "bamboo-bleached": ["/media/finish-white.png", "/media/finish-mint.png", "/media/hero-finish.png"],
+  "bamboo-slat": ["/media/cat-partition.png", "/media/finish-oak.png", "/media/g-extra-1.png"],
+  "bamboo-slat-dark": ["/media/finish-graphite.png", "/media/finish-black.png", "/media/cat-hidden.png"],
+  "bamboo-tile": ["/media/g-extra-2.png", "/media/finish-cappuccino.png", "/media/finish-oak.png"],
 };
 
 export const homeMedia = {
@@ -396,10 +482,198 @@ export const reviews = [
   },
 ];
 
+export type ProductCategory =
+  | "interior"
+  | "entrance"
+  | "hardware"
+  | "flooring"
+  | "bamboo";
+
+export const catalogCategories: ProductCategory[] = [
+  "interior",
+  "entrance",
+  "hardware",
+  "flooring",
+  "bamboo",
+];
+
+export const categoryMeta: Record<
+  ProductCategory,
+  {
+    title: string;
+    lead: string;
+    kitLabels: [string, string, string, string];
+    facets: {
+      key: string;
+      label: string;
+      options: { value: string; label: string }[];
+    }[];
+  }
+> = {
+  interior: {
+    title: "Межкомнатные двери",
+    lead: "Распашные, купе, скрытые и перегородки — с прозрачной ценой комплекта.",
+    kitLabels: ["Полотно", "Коробка", "Наличники", "Базовая фурнитура"],
+    facets: [
+      {
+        key: "type",
+        label: "Конструкция",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "swing", label: "Распашные" },
+          { value: "sliding", label: "Купе" },
+          { value: "hidden", label: "Скрытые" },
+          { value: "partition", label: "Перегородки" },
+        ],
+      },
+      {
+        key: "style",
+        label: "Стиль",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "modern", label: "Современный" },
+          { value: "neoclassic", label: "Неоклассика" },
+          { value: "classic", label: "Классика" },
+          { value: "loft", label: "Лофт" },
+        ],
+      },
+      {
+        key: "finish",
+        label: "Отделка",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "eco", label: "Экошпон" },
+          { value: "enamel", label: "Эмаль" },
+          { value: "paint", label: "Под покраску" },
+          { value: "glass", label: "Стекло / алюминий" },
+        ],
+      },
+    ],
+  },
+  entrance: {
+    title: "Входные двери",
+    lead: "Квартира и дом — с терморазрывом, зеркалом и понятной сметой монтажа.",
+    kitLabels: ["Полотно", "Коробка", "Наличники", "Базовая фурнитура"],
+    facets: [
+      {
+        key: "purpose",
+        label: "Назначение",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "flat", label: "Квартира" },
+          { value: "house", label: "Дом" },
+          { value: "economy", label: "Эконом / стройка" },
+        ],
+      },
+      {
+        key: "feature",
+        label: "Конструкция",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "thermo", label: "Терморазрыв" },
+          { value: "mirror", label: "Зеркало" },
+          { value: "noise", label: "Шумоизоляция" },
+        ],
+      },
+    ],
+  },
+  hardware: {
+    title: "Фурнитура",
+    lead: "Ручки, замки и комплектующие под выбранное полотно.",
+    kitLabels: ["Изделие", "—", "—", "—"],
+    facets: [
+      {
+        key: "cat",
+        label: "Категория",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "handles", label: "Ручки" },
+          { value: "locks", label: "Замки" },
+        ],
+      },
+    ],
+  },
+  flooring: {
+    title: "Напольные покрытия",
+    lead: "Ламинат, SPC и инженерная доска — в тон дверям и панелям салона.",
+    kitLabels: ["Покрытие", "Подложка", "Плинтус", "Пороги / стыки"],
+    facets: [
+      {
+        key: "type",
+        label: "Тип",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "laminate", label: "Ламинат" },
+          { value: "engineered", label: "Инженерная" },
+          { value: "spc", label: "SPC" },
+          { value: "parquet", label: "Паркетная доска" },
+        ],
+      },
+      {
+        key: "tone",
+        label: "Оттенок",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "light", label: "Светлый" },
+          { value: "natural", label: "Натуральный" },
+          { value: "dark", label: "Тёмный" },
+        ],
+      },
+      {
+        key: "grade",
+        label: "Класс",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "33", label: "33 класс" },
+          { value: "34", label: "34 класс" },
+          { value: "wet", label: "Влагостойкий" },
+        ],
+      },
+    ],
+  },
+  bamboo: {
+    title: "Бамбуковые панели",
+    lead: "Стеновые панели и рейки — тёплый акцент без тяжёлого монтажа.",
+    kitLabels: ["Панели", "Профиль / старты", "Клей / крепёж", "Углы / торцы"],
+    facets: [
+      {
+        key: "type",
+        label: "Формат",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "wall", label: "Стеновые" },
+          { value: "slat", label: "Рейки" },
+          { value: "tile", label: "Декор-плитка" },
+        ],
+      },
+      {
+        key: "tone",
+        label: "Цвет",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "natural", label: "Натуральный" },
+          { value: "carbon", label: "Карбон" },
+          { value: "bleached", label: "Выбеленный" },
+        ],
+      },
+      {
+        key: "mount",
+        label: "Монтаж",
+        options: [
+          { value: "all", label: "Все" },
+          { value: "glue", label: "Клей" },
+          { value: "click", label: "Шип-паз" },
+          { value: "batten", label: "Обрешётка" },
+        ],
+      },
+    ],
+  },
+};
+
 export type Product = {
   id: string;
   slug: string;
-  category: "interior" | "entrance" | "hardware";
+  category: ProductCategory;
   name: string;
   badge?: string;
   colorsExtra?: number;
@@ -408,6 +682,10 @@ export type Product = {
   finish: string;
   style: string;
   short: string;
+  /** Ключи фильтров каталога (значения из URL) */
+  filters?: Record<string, string>;
+  /** Явно отмеченные «похожие» — для админки позже */
+  relatedIds?: string[];
   kit: {
     leaf: number;
     frame: number;
@@ -430,6 +708,8 @@ export const products: Product[] = [
     finish: "Экошпон",
     style: "Современный",
     short: "Лёгкая межкомнатная модель для массовых проёмов. Часто берут комплектом на квартиру.",
+    filters: { type: "swing", style: "modern", finish: "eco" },
+    relatedIds: ["symphony", "coupe"],
     kit: { leaf: 5400, frame: 2100, casings: 1800, hardwareBase: 1200, installFrom: 2500 },
   },
   {
@@ -443,6 +723,8 @@ export const products: Product[] = [
     finish: "Экошпон",
     style: "Неоклассика",
     short: "Глухое полотно с мягкой геометрией — спокойный фон для гостиной и спальни.",
+    filters: { type: "swing", style: "neoclassic", finish: "eco" },
+    relatedIds: ["turin-507", "rome"],
     kit: { leaf: 5885, frame: 2300, casings: 1900, hardwareBase: 1400, installFrom: 2500 },
   },
   {
@@ -455,6 +737,8 @@ export const products: Product[] = [
     finish: "Под покраску",
     style: "Минимализм",
     short: "Скрытый короб, полотно в плоскости стены. Полный комплект по спеццене.",
+    filters: { type: "hidden", style: "modern", finish: "paint" },
+    relatedIds: ["loft"],
     kit: { leaf: 16800, frame: 5200, casings: 0, hardwareBase: 3000, installFrom: 4500 },
   },
   {
@@ -468,6 +752,8 @@ export const products: Product[] = [
     finish: "Эмаль",
     style: "Классика",
     short: "Эмалевое покрытие для интерьеров, где важна «чистая» поверхность и цвет.",
+    filters: { type: "swing", style: "classic", finish: "enamel" },
+    relatedIds: ["symphony"],
     kit: { leaf: 9268, frame: 2800, casings: 2400, hardwareBase: 1800, installFrom: 2800 },
   },
   {
@@ -481,6 +767,8 @@ export const products: Product[] = [
     finish: "Алюминий / стекло",
     style: "Лофт",
     short: "Стеклянная перегородка-дверь для зонирования без потери света.",
+    filters: { type: "partition", style: "loft", finish: "glass" },
+    relatedIds: ["hidden-line", "coupe"],
     kit: { leaf: 18900, frame: 4200, casings: 0, hardwareBase: 2600, installFrom: 4000 },
   },
   {
@@ -494,6 +782,8 @@ export const products: Product[] = [
     finish: "Экошпон",
     style: "Купе",
     short: "Раздвижная система для узких коридоров и смежных комнат.",
+    filters: { type: "sliding", style: "modern", finish: "eco" },
+    relatedIds: ["turin-507", "loft"],
     kit: { leaf: 7425, frame: 0, casings: 0, hardwareBase: 5200, installFrom: 3500 },
   },
   {
@@ -506,6 +796,8 @@ export const products: Product[] = [
     finish: "МДФ / металл",
     style: "Квартира",
     short: "Надёжная входная для квартиры: понятная комплектация и быстрый монтаж.",
+    filters: { purpose: "flat", feature: "noise" },
+    relatedIds: ["grand-ash"],
     kit: { leaf: 27500, frame: 0, casings: 3500, hardwareBase: 0, installFrom: 4500 },
   },
   {
@@ -518,6 +810,8 @@ export const products: Product[] = [
     finish: "МДФ ясень",
     style: "Квартира",
     short: "Тёплая фактура ясеня на панели — частый выбор для новостроек.",
+    filters: { purpose: "flat", feature: "mirror" },
+    relatedIds: ["sibir-sb3"],
     kit: { leaf: 28990, frame: 0, casings: 3800, hardwareBase: 0, installFrom: 4500 },
   },
   {
@@ -531,6 +825,8 @@ export const products: Product[] = [
     finish: "Металл",
     style: "Эконом",
     short: "Бюджетный входной контур для стройки и аренды без потери базовой безопасности.",
+    filters: { purpose: "economy" },
+    relatedIds: ["sibir-sb3"],
     kit: { leaf: 11500, frame: 0, casings: 2500, hardwareBase: 0, installFrom: 4000 },
   },
   {
@@ -543,6 +839,8 @@ export const products: Product[] = [
     finish: "Терморазрыв",
     style: "Дом",
     short: "Уличная дверь с терморазрывом для частного дома — когда важны тепло и тишина.",
+    filters: { purpose: "house", feature: "thermo" },
+    relatedIds: ["grand-ash"],
     kit: { leaf: 126690, frame: 0, casings: 0, hardwareBase: 0, installFrom: 8000 },
   },
   {
@@ -555,6 +853,7 @@ export const products: Product[] = [
     finish: "Матовый хром",
     style: "Универсальная",
     short: "Тихая ручка с мягким ходом — ставят в комплекте с эмалью и экошпоном.",
+    filters: { cat: "handles" },
     kit: { leaf: 2890, frame: 0, casings: 0, hardwareBase: 0 },
   },
   {
@@ -566,7 +865,179 @@ export const products: Product[] = [
     finish: "Сталь",
     style: "Входные",
     short: "Цилиндровый замок для входных дверей с защитой от высверливания.",
+    filters: { cat: "locks" },
     kit: { leaf: 4590, frame: 0, casings: 0, hardwareBase: 0 },
+  },
+  // --- Напольные покрытия (6) ---
+  {
+    id: "floor-nordic",
+    slug: "laminat-nordic-oak",
+    category: "flooring",
+    name: "Ламинат Nordic Oak 33",
+    badge: "Хит",
+    colorsExtra: 4,
+    price: 1890,
+    oldPrice: 2290,
+    finish: "Дуб светлый",
+    style: "Ламинат · м²",
+    short: "Светлый дуб под скандинавский интерьер — стыкуется с белыми и эмалевыми дверями.",
+    filters: { type: "laminate", tone: "light", grade: "33" },
+    relatedIds: ["floor-honey", "bamboo-natural"],
+    kit: { leaf: 1890, frame: 180, casings: 420, hardwareBase: 290, installFrom: 450 },
+  },
+  {
+    id: "floor-honey",
+    slug: "laminat-honey-oak",
+    category: "flooring",
+    name: "Ламинат Honey Oak 33",
+    price: 2050,
+    finish: "Дуб медовый",
+    style: "Ламинат · м²",
+    short: "Тёплый натуральный тон — частый выбор под экошпон и ясень на дверях.",
+    filters: { type: "laminate", tone: "natural", grade: "33" },
+    relatedIds: ["floor-nordic", "floor-walnut"],
+    kit: { leaf: 2050, frame: 180, casings: 420, hardwareBase: 290, installFrom: 450 },
+  },
+  {
+    id: "floor-walnut",
+    slug: "laminat-graphite-walnut",
+    category: "flooring",
+    name: "Ламинат Graphite Walnut 34",
+    badge: "Новинка",
+    price: 2680,
+    finish: "Орех графит",
+    style: "Ламинат · м²",
+    short: "Тёмный коммерческий класс — коридоры, кухни, активные зоны.",
+    filters: { type: "laminate", tone: "dark", grade: "34" },
+    relatedIds: ["floor-spc-stone", "bamboo-carbon"],
+    kit: { leaf: 2680, frame: 220, casings: 480, hardwareBase: 320, installFrom: 500 },
+  },
+  {
+    id: "floor-spc-stone",
+    slug: "spc-stone-grey",
+    category: "flooring",
+    name: "SPC Stone Grey",
+    badge: "Влагостойкий",
+    price: 3120,
+    oldPrice: 3490,
+    finish: "Камень серый",
+    style: "SPC · м²",
+    short: "Жёсткая SPC-плита для влажных зон — без разбухания и с быстрым клик-замком.",
+    filters: { type: "spc", tone: "light", grade: "wet" },
+    relatedIds: ["floor-spc-oak", "floor-walnut"],
+    kit: { leaf: 3120, frame: 0, casings: 520, hardwareBase: 360, installFrom: 550 },
+  },
+  {
+    id: "floor-spc-oak",
+    slug: "spc-oak-natural",
+    category: "flooring",
+    name: "SPC Oak Natural",
+    price: 3350,
+    finish: "Дуб натуральный",
+    style: "SPC · м²",
+    short: "Древесный рисунок на SPC — тёплый вид и влагостойкость одной позиции.",
+    filters: { type: "spc", tone: "natural", grade: "wet" },
+    relatedIds: ["floor-honey", "floor-engineered"],
+    kit: { leaf: 3350, frame: 0, casings: 520, hardwareBase: 360, installFrom: 550 },
+  },
+  {
+    id: "floor-engineered",
+    slug: "inzhenernaya-yasen",
+    category: "flooring",
+    name: "Инженерная доска Ясень",
+    badge: "Премиум",
+    price: 5890,
+    finish: "Ясень браш",
+    style: "Инженерная · м²",
+    short: "Живая фактура ясеня под паркетный вид — к дверям «Гранд ясень» и эмалям.",
+    filters: { type: "engineered", tone: "natural", grade: "33" },
+    relatedIds: ["floor-honey", "bamboo-natural"],
+    kit: { leaf: 5890, frame: 320, casings: 680, hardwareBase: 410, installFrom: 900 },
+  },
+  // --- Бамбуковые панели (6) ---
+  {
+    id: "bamboo-natural",
+    slug: "bambuk-wall-natural",
+    category: "bamboo",
+    name: "Бамбук Wall Natural",
+    badge: "Хит",
+    colorsExtra: 2,
+    price: 4200,
+    finish: "Натуральный",
+    style: "Стеновые · м²",
+    short: "Классическая стеновая панель — акцентная стена в гостиной или ТВ-зоне.",
+    filters: { type: "wall", tone: "natural", mount: "glue" },
+    relatedIds: ["bamboo-slat", "floor-honey"],
+    kit: { leaf: 4200, frame: 680, casings: 520, hardwareBase: 390, installFrom: 700 },
+  },
+  {
+    id: "bamboo-carbon",
+    slug: "bambuk-wall-carbon",
+    category: "bamboo",
+    name: "Бамбук Wall Carbon",
+    badge: "Новинка",
+    price: 4580,
+    oldPrice: 5100,
+    finish: "Карбон",
+    style: "Стеновые · м²",
+    short: "Тёмный карбоновый тон — под графитовые двери и лофт-интерьеры.",
+    filters: { type: "wall", tone: "carbon", mount: "glue" },
+    relatedIds: ["bamboo-slat-dark", "floor-walnut"],
+    kit: { leaf: 4580, frame: 680, casings: 520, hardwareBase: 390, installFrom: 700 },
+  },
+  {
+    id: "bamboo-bleached",
+    slug: "bambuk-wall-bleached",
+    category: "bamboo",
+    name: "Бамбук Wall Bleached",
+    price: 4450,
+    finish: "Выбеленный",
+    style: "Стеновые · м²",
+    short: "Светлый выбеленный бамбук — к эмалевым и скрытым дверям.",
+    filters: { type: "wall", tone: "bleached", mount: "click" },
+    relatedIds: ["bamboo-natural", "floor-nordic"],
+    kit: { leaf: 4450, frame: 720, casings: 540, hardwareBase: 410, installFrom: 750 },
+  },
+  {
+    id: "bamboo-slat",
+    slug: "bambuk-reiki-natura",
+    category: "bamboo",
+    name: "Рейки Natura 40×20",
+    badge: "Хит",
+    price: 2890,
+    finish: "Натуральный",
+    style: "Рейки · м.п.",
+    short: "Вертикальные ламели для зонирования и акустического фона.",
+    filters: { type: "slat", tone: "natural", mount: "batten" },
+    relatedIds: ["bamboo-natural", "bamboo-slat-dark"],
+    kit: { leaf: 2890, frame: 450, casings: 280, hardwareBase: 220, installFrom: 500 },
+  },
+  {
+    id: "bamboo-slat-dark",
+    slug: "bambuk-reiki-carbon",
+    category: "bamboo",
+    name: "Рейки Carbon 40×20",
+    price: 3050,
+    finish: "Карбон",
+    style: "Рейки · м.п.",
+    short: "Тёмные рейки в системе на обрешётке — быстрый монтаж без мокрых работ.",
+    filters: { type: "slat", tone: "carbon", mount: "batten" },
+    relatedIds: ["bamboo-carbon", "bamboo-slat"],
+    kit: { leaf: 3050, frame: 450, casings: 280, hardwareBase: 220, installFrom: 500 },
+  },
+  {
+    id: "bamboo-tile",
+    slug: "bambuk-plitka-mosaic",
+    category: "bamboo",
+    name: "Бамбук Mosaic Tile",
+    badge: "Декор",
+    price: 1980,
+    finish: "Натуральный микс",
+    style: "Плитка · м²",
+    short: "Декоративная бамбуковая плитка для ниш, изголовья и небольших зон.",
+    filters: { type: "tile", tone: "natural", mount: "glue" },
+    relatedIds: ["bamboo-natural", "bamboo-bleached"],
+    kit: { leaf: 1980, frame: 0, casings: 360, hardwareBase: 180, installFrom: 600 },
   },
 ];
 export const quiz = {
@@ -654,16 +1125,17 @@ export const contactsPage = {
 
 export const footer = {
   about:
-    "PORTAL — салон дверей в Тюмени. Каталог, замер, доставка и установка под ключ.",
+    "PORTAL — салон дверей, полов и панелей в Тюмени. Каталог, замер, доставка и установка под ключ.",
   legal: "© PORTAL. Демо-контент для согласования с заказчиком.",
   cols: [
     {
       title: "Покупателям",
       links: [
-        { label: "Каталог", href: "/catalog/interior" },
-        { label: "Акции", href: "/promotions" },
+        { label: "Межкомнатные", href: "/catalog/interior" },
+        { label: "Входные", href: "/catalog/entrance" },
+        { label: "Напольные покрытия", href: "/catalog/flooring" },
+        { label: "Бамбуковые панели", href: "/catalog/bamboo" },
         { label: "Замер", href: "/measure" },
-        { label: "Услуги", href: "/services" },
       ],
     },
     {

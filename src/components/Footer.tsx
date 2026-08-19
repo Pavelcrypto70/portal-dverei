@@ -41,7 +41,12 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="wrap pb-8 text-xs text-white/35">{footer.legal}</div>
+        <div className="wrap flex items-center justify-between gap-4 pb-8 text-xs text-white/35">
+          <span>{footer.legal}</span>
+          <Link href="/admin/login" className="text-white/25 transition hover:text-white/55">
+            Вход
+          </Link>
+        </div>
       </div>
     </footer>
   );

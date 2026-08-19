@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
-import { promos } from "@/content/site";
+import { useLivePromos } from "@/components/CatalogStore";
 
 export default function PromotionsPage() {
+  const { promos } = useLivePromos();
+
   return (
     <div className="pt-[72px]">
       <div className="wrap py-12">
@@ -13,7 +17,9 @@ export default function PromotionsPage() {
               <p className="kicker">{p.badge}</p>
               <h2 className="mt-4 text-2xl font-semibold">{p.title}</h2>
               <p className="mt-3 text-sm text-[var(--mute)]">{p.text}</p>
-              <Link href="/measure" className="btn btn-solid mt-6">Уточнить на замере</Link>
+              <Link href="/measure" className="btn btn-solid mt-6">
+                Уточнить на замере
+              </Link>
             </article>
           ))}
         </div>
