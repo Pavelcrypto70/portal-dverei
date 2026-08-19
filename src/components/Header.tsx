@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { brand, nav, salons } from "@/content/site";
 
+const secondaryLabels = new Set(["О нас", "Контакты"]);
+
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -45,7 +47,6 @@ export function Header() {
       return;
     }
     router.push("/");
-    // после перехода на главную — наверх
     requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
   };
 
@@ -59,12 +60,12 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="wrap flex h-[72px] items-center gap-3 xl:gap-5">
+      <div className="wrap flex h-[72px] items-center gap-4">
         <Link
           href="/"
           onClick={goHomeTop}
           aria-label="Наверх на главную"
-          className={`display shrink-0 max-w-[42vw] pr-3 text-[0.95rem] font-extrabold leading-none tracking-tight sm:max-w-none sm:pr-5 sm:text-[1.05rem] xl:pr-6 xl:text-[1.25rem] ${
+          className={`display shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight sm:text-[1.05rem] xl:text-[1.2rem] ${
             ink
               ? "text-[var(--brand-deep)]"
               : "text-[var(--brand)] drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
@@ -73,59 +74,66 @@ export function Header() {
           {brand.name}
         </Link>
 
-        <nav className="relative ml-2 hidden min-w-0 flex-1 items-center justify-center gap-1 border-l border-transparent pl-4 xl:flex xl:border-[var(--line)]/40 xl:pl-5">
-          {nav.map((item) => (
-            <div
-              key={item.label}
-              className="relative shrink-0"
-              onMouseEnter={() => ("columns" in item ? enter(item.label) : setOpen(null))}
-              onMouseLeave={leave}
-            >
-              <Link
-                href={item.href}
-                className={`block whitespace-nowrap px-2 py-2 text-[13px] font-medium leading-none transition 2xl:px-2.5 2xl:text-sm ${
-                  scrolled
-                    ? "text-[var(--ink-2)] hover:text-[var(--ink)]"
-                    : "text-white/85 hover:text-white"
-                }`}
+        <nav className="relative hidden min-w-0 flex-1 items-center justify-start gap-0 overflow-hidden xl:flex">
+          {nav.map((item) => {
+            const secondary = secondaryLabels.has(item.label);
+            return (
+              <div
+                key={item.label}
+                className={`relative shrink-0 ${secondary ? "hidden 2xl:block" : ""}`}
+                onMouseEnter={() => ("columns" in item ? enter(item.label) : setOpen(null))}
+                onMouseLeave={leave}
               >
-                {item.label}
-              </Link>
-              {"columns" in item && open === item.label && item.columns ? (
-                <div
-                  className="absolute left-0 top-full z-50 mt-3 w-[min(560px,90vw)] border border-[var(--line)] bg-[var(--paper)] p-6"
-                  onMouseEnter={() => enter(item.label)}
-                  onMouseLeave={leave}
+                <Link
+                  href={item.href}
+                  className={`block whitespace-nowrap px-1.5 py-2 text-[12.5px] font-medium leading-none transition 2xl:px-2 2xl:text-[13px] ${
+                    scrolled
+                      ? "text-[var(--ink-2)] hover:text-[var(--ink)]"
+                      : "text-white/85 hover:text-white"
+                  }`}
                 >
-                  <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
-                    {item.columns.map((col) => (
-                      <div key={col.title}>
-                        <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">
-                          {col.title}
-                        </p>
-                        <ul className="space-y-2">
-                          {col.links.map((l) => (
-                            <li key={l.href}>
-                              <Link
-                                href={l.href}
-                                className="text-sm text-[var(--ink-2)] hover:text-[var(--accent)]"
-                              >
-                                {l.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+                  {item.label}
+                </Link>
+                {"columns" in item && open === item.label && item.columns ? (
+                  <div
+                    className="absolute left-0 top-full z-50 mt-3 w-[min(560px,90vw)] border border-[var(--line)] bg-[var(--paper)] p-6"
+                    onMouseEnter={() => enter(item.label)}
+                    onMouseLeave={leave}
+                  >
+                    <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+                      {item.columns.map((col) => (
+                        <div key={col.title}>
+                          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">
+                            {col.title}
+                          </p>
+                          <ul className="space-y-2">
+                            {col.links.map((l) => (
+                              <li key={l.href}>
+                                <Link
+                                  href={l.href}
+                                  className="text-sm text-[var(--ink-2)] hover:text-[var(--accent)]"
+                                >
+                                  {l.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          ))}
+                ) : null}
+              </div>
+            );
+          })}
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          <div className="hidden flex-col items-end justify-center leading-none xl:flex">
+        <div
+          className={`relative z-10 ml-auto flex shrink-0 items-center gap-3 border-l pl-4 ${
+            ink ? "border-[var(--line)]" : "border-white/20"
+          }`}
+        >
+          <div className="hidden flex-col items-end justify-center leading-none 2xl:flex">
             <a
               href={brand.phoneMainHref}
               className={`whitespace-nowrap text-sm font-bold leading-none ${
@@ -144,7 +152,7 @@ export function Header() {
           </div>
           <Link
             href="/measure"
-            className={`btn !min-h-10 !px-3.5 sm:inline-flex ${
+            className={`btn !min-h-10 !px-3.5 ${
               ink ? "btn-accent" : "bg-white text-[var(--ink)]"
             } hidden sm:inline-flex`}
           >
