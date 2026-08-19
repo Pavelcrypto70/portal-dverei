@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { brand, nav, salons } from "@/content/site";
 
 export function Header() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
   const [mobile, setMobile] = useState(false);
@@ -33,27 +36,42 @@ export function Header() {
     timer.current = setTimeout(() => setOpen(null), 140);
   };
 
+  const goHomeTop = (e: React.MouseEvent) => {
+    setMobile(false);
+    setOpen(null);
+    if (pathname === "/" || pathname === "") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    router.push("/");
+    // после перехода на главную — наверх
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  };
+
   const ink = scrolled || mobile;
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         ink
-          ? "border-b border-[var(--line)] bg-[rgba(244,245,247,0.92)] backdrop-blur-xl"
+          ? "border-b border-[var(--line)] bg-[rgba(246,245,241,0.94)] backdrop-blur-xl"
           : "bg-transparent"
       }`}
     >
-      <div className="wrap flex h-[72px] items-center gap-3 xl:gap-4">
+      <div className="wrap flex h-[72px] items-center gap-3 xl:gap-5">
         <Link
           href="/"
-          className={`display shrink-0 max-w-[42vw] text-[0.95rem] font-extrabold leading-none tracking-tight sm:text-[1.05rem] xl:max-w-none xl:text-[1.25rem] ${
+          onClick={goHomeTop}
+          aria-label="Наверх на главную"
+          className={`display shrink-0 max-w-[42vw] pr-3 text-[0.95rem] font-extrabold leading-none tracking-tight sm:max-w-none sm:pr-5 sm:text-[1.05rem] xl:pr-6 xl:text-[1.25rem] ${
             ink ? "text-[var(--ink)]" : "text-white"
           }`}
         >
           {brand.name}
         </Link>
 
-        <nav className="relative ml-1 hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
+        <nav className="relative ml-2 hidden min-w-0 flex-1 items-center justify-center gap-1 border-l border-transparent pl-4 xl:flex xl:border-[var(--line)]/40 xl:pl-5">
           {nav.map((item) => (
             <div
               key={item.label}

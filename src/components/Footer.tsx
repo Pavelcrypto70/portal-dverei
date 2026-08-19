@@ -1,12 +1,36 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { brand, footer, salons } from "@/content/site";
 
+function goTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 export function Footer() {
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
     <footer className="bg-[var(--ink)] text-white">
       <div className="wrap grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="display text-4xl font-extrabold">{brand.name}</p>
+          <Link
+            href="/"
+            className="display inline-block text-4xl font-extrabold transition hover:text-[var(--brand)]"
+            onClick={(e) => {
+              if (pathname === "/" || pathname === "") {
+                e.preventDefault();
+                goTop();
+                return;
+              }
+              router.push("/");
+              requestAnimationFrame(goTop);
+            }}
+          >
+            {brand.name}
+          </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{footer.about}</p>
           <a href={brand.phoneMainHref} className="mt-6 inline-block text-xl font-bold">
             {brand.phoneMain}
