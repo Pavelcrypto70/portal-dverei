@@ -545,6 +545,7 @@ export const categoryMeta: Record<
           { value: "all", label: "Все" },
           { value: "swing", label: "Распашные" },
           { value: "sliding", label: "Купе" },
+          { value: "folding", label: "Складные" },
           { value: "hidden", label: "Скрытые" },
           { value: "partition", label: "Перегородки" },
         ],
