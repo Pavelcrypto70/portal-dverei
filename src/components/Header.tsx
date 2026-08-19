@@ -65,7 +65,9 @@ export function Header() {
           onClick={goHomeTop}
           aria-label="Наверх на главную"
           className={`display shrink-0 max-w-[42vw] pr-3 text-[0.95rem] font-extrabold leading-none tracking-tight sm:max-w-none sm:pr-5 sm:text-[1.05rem] xl:pr-6 xl:text-[1.25rem] ${
-            ink ? "text-[var(--ink)]" : "text-white"
+            ink
+              ? "text-[var(--brand-deep)]"
+              : "text-[var(--brand)] drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
           }`}
         >
           {brand.name}
