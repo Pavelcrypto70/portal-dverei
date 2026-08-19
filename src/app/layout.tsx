@@ -17,8 +17,8 @@ const body = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "PORTAL — двери в Тюмени",
-    template: "%s · PORTAL",
+    default: "ШИКАРДОРС.РФ — двери в Тюмени",
+    template: "%s · ШИКАРДОРС.РФ",
   },
   description:
     "Межкомнатные и входные двери. Прозрачная цена комплекта, бесплатный замер, монтаж под ключ.",

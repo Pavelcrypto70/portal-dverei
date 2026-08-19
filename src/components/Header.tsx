@@ -46,7 +46,7 @@ export function Header() {
       <div className="wrap flex h-[72px] items-center gap-3 xl:gap-4">
         <Link
           href="/"
-          className={`display shrink-0 text-[1.35rem] font-extrabold tracking-tight xl:text-[1.55rem] ${
+          className={`display shrink-0 max-w-[42vw] text-[0.95rem] font-extrabold leading-none tracking-tight sm:text-[1.05rem] xl:max-w-none xl:text-[1.25rem] ${
             ink ? "text-[var(--ink)]" : "text-white"
           }`}
         >
