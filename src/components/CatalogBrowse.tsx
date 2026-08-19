@@ -155,16 +155,23 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
                 ))}
               </div>
               {hasMore ? (
-                <div className="mt-12 flex justify-center">
+                <div className="mt-12 flex flex-col items-center gap-3">
+                  <p className="text-sm text-[var(--mute)]">
+                    Показано {shown.length} из {list.length}
+                  </p>
                   <button
                     type="button"
-                    className="btn btn-line"
+                    className="btn btn-solid min-w-[200px]"
                     onClick={() => setVisible((v) => v + PAGE_SIZE)}
                   >
-                    Ещё · +{Math.min(PAGE_SIZE, list.length - visible)}
+                    Ещё · показать ещё {Math.min(PAGE_SIZE, list.length - visible)}
                   </button>
                 </div>
-              ) : null}
+              ) : (
+                <p className="mt-10 text-center text-sm text-[var(--mute)]">
+                  Показаны все {list.length} товаров в выборке
+                </p>
+              )}
             </>
           ) : (
             <div className="border border-[var(--line)] p-8 text-center">
