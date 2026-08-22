@@ -10,6 +10,7 @@ import {
   type Product,
   type ProductCategory,
 } from "@/content/site";
+import { enrichFilters } from "@/lib/enrich-filters";
 
 type Tab = "products" | "promos";
 
@@ -295,9 +296,17 @@ function ProductEditor({
     onChange({ ...product, kit: { ...product.kit, [key]: value }, price: key === "leaf" ? value : product.price });
 
   const related = new Set(product.relatedIds ?? []);
+  const facets = categoryMeta[product.category]?.facets ?? [];
+  const currentFilters = { ...enrichFilters(product), ...(product.filters ?? {}) };
+
+  const setFilter = (key: string, value: string) => {
+    const next = { ...(product.filters ?? {}), [key]: value };
+    if (value === "all" || value === "") delete next[key];
+    onChange({ ...product, filters: next });
+  };
 
   return (
-    <div className="h-fit border border-[var(--line)] bg-[var(--paper)] p-4">
+    <div className="h-fit max-h-[80vh] overflow-y-auto border border-[var(--line)] bg-[var(--paper)] p-4">
       <p className="text-sm font-bold">Редактор товара</p>
       <div className="mt-3 grid gap-2">
         <input
@@ -315,7 +324,13 @@ function ProductEditor({
         <select
           className="border border-[var(--line)] px-3 py-2 text-sm"
           value={product.category}
-          onChange={(e) => set("category", e.target.value as ProductCategory)}
+          onChange={(e) =>
+            onChange({
+              ...product,
+              category: e.target.value as ProductCategory,
+              filters: {},
+            })
+          }
         >
           {catalogCategories.map((c) => (
             <option key={c} value={c}>
@@ -354,13 +369,13 @@ function ProductEditor({
           className="border border-[var(--line)] px-3 py-2 text-sm"
           value={product.finish}
           onChange={(e) => set("finish", e.target.value)}
-          placeholder="Отделка"
+          placeholder="Отделка (текст на карточке)"
         />
         <input
           className="border border-[var(--line)] px-3 py-2 text-sm"
           value={product.style}
           onChange={(e) => set("style", e.target.value)}
-          placeholder="Стиль / тип"
+          placeholder="Стиль (текст на карточке)"
         />
         <textarea
           className="min-h-20 border border-[var(--line)] px-3 py-2 text-sm"
@@ -368,6 +383,34 @@ function ProductEditor({
           onChange={(e) => set("short", e.target.value)}
           placeholder="Короткое описание"
         />
+
+        <p className="pt-3 text-xs font-bold uppercase tracking-wide text-[var(--mute)]">
+          Фильтры каталога
+        </p>
+        <p className="text-[11px] text-[var(--mute)]">
+          Отметьте, в какие фильтры попадает товар. Цена считается автоматически.
+        </p>
+        <div className="space-y-3 rounded border border-[var(--line)] p-3">
+          {facets
+            .filter((f) => f.key !== "price")
+            .map((facet) => (
+              <label key={facet.key} className="grid gap-1 text-xs">
+                <span className="font-semibold text-[var(--ink)]">{facet.label}</span>
+                <select
+                  className="border border-[var(--line)] px-2 py-1.5 text-sm"
+                  value={currentFilters[facet.key] || "all"}
+                  onChange={(e) => setFilter(facet.key, e.target.value)}
+                >
+                  {facet.options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ))}
+        </div>
+
         <p className="pt-2 text-xs font-bold uppercase tracking-wide text-[var(--mute)]">Комплект</p>
         {(
           [

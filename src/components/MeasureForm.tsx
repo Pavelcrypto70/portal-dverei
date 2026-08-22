@@ -101,7 +101,7 @@ export function MeasureForm({ compact = false }: { compact?: boolean }) {
           <option value="interior">Межкомнатные</option>
           <option value="entrance">Входные</option>
           <option value="flooring">Напольные покрытия</option>
-          <option value="bamboo">Бамбуковые панели</option>
+          <option value="panels">Стеновые панели</option>
           <option value="both">Несколько направлений</option>
         </select>
         <input

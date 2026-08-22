@@ -4,25 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
-import { categoryMeta, type ProductCategory } from "@/content/site";
+import { matchProductFilters } from "@/content/filters";
+import { categoryMeta, type Product, type ProductCategory } from "@/content/site";
+import { enrichFilters } from "@/lib/enrich-filters";
 import { saveCatalogReturn } from "@/lib/session-state";
 import { useLiveProducts } from "@/components/CatalogStore";
 
 const PAGE_SIZE = 6;
-
-function matchesFilters(
-  p: { filters?: Record<string, string>; finish: string; style: string },
-  filters: Record<string, string>,
-) {
-  return Object.entries(filters).every(([key, value]) => {
-    if (!value || value === "all") return true;
-    const field = p.filters?.[key] ?? "";
-    if (field) return field === value || field.split("|").includes(value);
-    if (key === "finish") return p.finish.toLowerCase().includes(value.toLowerCase());
-    if (key === "style") return p.style.toLowerCase().includes(value.toLowerCase());
-    return true;
-  });
-}
 
 function queryToFilters(sp: URLSearchParams) {
   const next: Record<string, string> = {};
@@ -71,10 +59,13 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
     saveCatalogReturn(`${pathname}${qs ? `?${qs}` : ""}`);
   }, [filters, pathname]);
 
-  const list = useMemo(
-    () => products.filter((p) => p.category === category && matchesFilters(p, filters)),
-    [category, filters],
-  );
+  const list = useMemo(() => {
+    return products.filter((p) => {
+      if (p.category !== category) return false;
+      const enriched = { ...p, filters: enrichFilters(p) };
+      return matchProductFilters(enriched, filters);
+    });
+  }, [category, filters, products]);
 
   const shown = list.slice(0, visible);
   const hasMore = visible < list.length;
@@ -95,16 +86,16 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
       <h1 className="display mt-3 text-4xl font-extrabold md:text-6xl">{meta.title}</h1>
       <p className="mt-3 max-w-2xl text-[var(--mute)]">{meta.lead}</p>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
-        <aside className="h-fit border-t border-[var(--ink)] pt-5">
+      <div className="mt-10 grid gap-10 lg:grid-cols-[260px_1fr]">
+        <aside className="h-fit max-h-[calc(100svh-120px)] overflow-y-auto border-t border-[var(--ink)] pt-5 pr-2">
           <p className="text-sm font-bold">Фильтры</p>
-          <div className="mt-5 space-y-5">
+          <div className="mt-5 space-y-6">
             {facets.map((f) => (
               <div key={f.key}>
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">
                   {f.label}
                 </p>
-                <div className="mt-2 space-y-2">
+                <div className="mt-2 space-y-1.5">
                   {f.options.map((opt) => {
                     const active = (filters[f.key] || "all") === opt.value;
                     return (
@@ -112,7 +103,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
                         key={opt.value}
                         type="button"
                         onClick={() => setFacet(f.key, opt.value)}
-                        className={`block text-left text-sm transition ${
+                        className={`block w-full text-left text-sm leading-snug transition ${
                           active
                             ? "font-semibold text-[var(--accent)]"
                             : "text-[var(--ink-2)] hover:text-[var(--accent)]"
@@ -150,7 +141,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
           {shown.length ? (
             <>
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
-                {shown.map((p) => (
+                {shown.map((p: Product) => (
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>

@@ -12,5 +12,5 @@ export const adminAuth = {
 };
 
 export const AUTH_KEY = "portal:admin-auth";
-export const PRODUCTS_KEY = "portal:products-v2";
-export const PROMOS_KEY = "portal:promos-v2";
+export const PRODUCTS_KEY = "portal:products-v3";
+export const PROMOS_KEY = "portal:promos-v3";
