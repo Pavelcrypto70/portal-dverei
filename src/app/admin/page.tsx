@@ -13,7 +13,8 @@ import {
   type ProductCategory,
 } from "@/content/site";
 import { enrichFilters } from "@/lib/enrich-filters";
-import { mergeBrandFacets } from "@/lib/merge-brand-facets";
+import { EXTENDABLE_FACET_KEYS } from "@/lib/custom-facet-options";
+import { mergeCustomFacets } from "@/lib/merge-brand-facets";
 import { fileToJpegDataUrl, productCover } from "@/lib/product-media";
 
 type Tab = "products" | "promos";
@@ -39,14 +40,14 @@ export default function AdminPage() {
     isAuthed,
     products,
     promos,
-    customBrands,
+    customFacets,
     logout,
     upsertProduct,
     deleteProduct,
     upsertPromo,
     deletePromo,
     resetCatalog,
-    registerBrand,
+    registerFacetOption,
   } = useCatalogStore();
   const [tab, setTab] = useState<Tab>("products");
   const [filterCat, setFilterCat] = useState<ProductCategory | "all">("all");
@@ -87,7 +88,7 @@ export default function AdminPage() {
             type="button"
             className="btn btn-line"
             onClick={() => {
-              if (confirm("Сбросить каталог, акции и своих производителей к демо?")) resetCatalog();
+              if (confirm("Сбросить каталог, акции и свои фильтры (цвета/бренды) к демо?")) resetCatalog();
             }}
           >
             Сброс
@@ -106,8 +107,8 @@ export default function AdminPage() {
       </div>
 
       <p className="mt-3 max-w-2xl text-sm text-[var(--mute)]">
-        Изменения в этом браузере (localStorage). Фото сжимаются в JPEG. Новый производитель
-        появляется в фильтрах каталога сразу после сохранения.
+        Изменения в этом браузере (localStorage). Фото сжимаются в JPEG. Новые цвет и производитель
+        появляются в фильтрах каталога сразу после добавления.
       </p>
 
       <div className="mt-8 flex gap-2 border-b border-[var(--line)]">
@@ -212,8 +213,8 @@ export default function AdminPage() {
             <ProductEditor
               product={editing}
               allProducts={products}
-              customBrands={customBrands}
-              onRegisterBrand={registerBrand}
+              customFacets={customFacets}
+              onRegisterFacet={registerFacetOption}
               onChange={setEditing}
               onSave={() => {
                 const slug = editing.slug.trim() || editing.id;
@@ -323,22 +324,22 @@ export default function AdminPage() {
 function ProductEditor({
   product,
   allProducts,
-  customBrands,
-  onRegisterBrand,
+  customFacets,
+  onRegisterFacet,
   onChange,
   onSave,
   onCancel,
 }: {
   product: Product;
   allProducts: Product[];
-  customBrands: ReturnType<typeof useCatalogStore>["customBrands"];
-  onRegisterBrand: ReturnType<typeof useCatalogStore>["registerBrand"];
+  customFacets: ReturnType<typeof useCatalogStore>["customFacets"];
+  onRegisterFacet: ReturnType<typeof useCatalogStore>["registerFacetOption"];
   onChange: (p: Product) => void;
   onSave: () => void;
   onCancel: () => void;
 }) {
   const [uploading, setUploading] = useState(false);
-  const [newBrand, setNewBrand] = useState("");
+  const [newOptionByFacet, setNewOptionByFacet] = useState<Record<string, string>>({});
   const set = <K extends keyof Product>(key: K, value: Product[K]) =>
     onChange({ ...product, [key]: value });
 
@@ -350,15 +351,19 @@ function ProductEditor({
     });
 
   const related = new Set(product.relatedIds ?? []);
-  const brandValues = allProducts
-    .filter((p) => p.category === product.category)
-    .map((p) => enrichFilters(p).brand)
-    .filter(Boolean) as string[];
-  const facets = mergeBrandFacets(
+  const byKey: Partial<Record<string, string[]>> = {};
+  for (const p of allProducts.filter((x) => x.category === product.category)) {
+    const f = enrichFilters(p);
+    for (const [k, v] of Object.entries(f)) {
+      if (!v) continue;
+      (byKey[k] ??= []).push(v);
+    }
+  }
+  const facets = mergeCustomFacets(
     product.category,
     categoryMeta[product.category]?.facets ?? [],
-    customBrands,
-    brandValues,
+    customFacets,
+    byKey,
   );
   const currentFilters = { ...enrichFilters(product), ...(product.filters ?? {}) };
 
@@ -519,7 +524,7 @@ function ProductEditor({
           Фильтры каталога
         </p>
         <p className="text-[11px] text-[var(--mute)]">
-          Отметьте фасеты. Цена — ползунком на сайте. Новый производитель — ниже.
+          Отметьте фасеты. К цвету, производителю и декору можно добавить своё значение.
         </p>
         <div className="space-y-3 rounded border border-[var(--line)] p-3">
           {facets
@@ -538,23 +543,31 @@ function ProductEditor({
                     </option>
                   ))}
                 </select>
-                {facet.key === "brand" ? (
+                {EXTENDABLE_FACET_KEYS.has(facet.key) ? (
                   <div className="mt-1 flex gap-2">
                     <input
                       className="min-w-0 flex-1 border border-[var(--line)] px-2 py-1.5 text-sm"
-                      value={newBrand}
-                      onChange={(e) => setNewBrand(e.target.value)}
-                      placeholder="Новый производитель"
+                      value={newOptionByFacet[facet.key] ?? ""}
+                      onChange={(e) =>
+                        setNewOptionByFacet((prev) => ({ ...prev, [facet.key]: e.target.value }))
+                      }
+                      placeholder={
+                        facet.key === "brand"
+                          ? "Новый производитель"
+                          : facet.key === "color"
+                            ? "Новый цвет"
+                            : "Новый декор"
+                      }
                     />
                     <button
                       type="button"
                       className="btn btn-line !min-h-9 shrink-0 !px-3 text-xs"
                       onClick={() => {
-                        const label = newBrand.trim();
+                        const label = (newOptionByFacet[facet.key] ?? "").trim();
                         if (!label) return;
-                        const opt = onRegisterBrand(product.category, label);
-                        setFilter("brand", opt.value);
-                        setNewBrand("");
+                        const opt = onRegisterFacet(product.category, facet.key, label);
+                        setFilter(facet.key, opt.value);
+                        setNewOptionByFacet((prev) => ({ ...prev, [facet.key]: "" }));
                       }}
                     >
                       + Добавить

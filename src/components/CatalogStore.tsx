@@ -23,11 +23,11 @@ import {
   type Promo,
 } from "@/lib/admin-config";
 import {
-  addCustomBrand,
-  readCustomBrands,
-  writeCustomBrands,
-  type CustomBrandsMap,
-} from "@/lib/custom-brands";
+  addCustomFacetOption,
+  readCustomFacets,
+  writeCustomFacets,
+  type CustomFacetsMap,
+} from "@/lib/custom-facet-options";
 import type { FacetOption } from "@/content/filters";
 
 type StoreCtx = {
@@ -35,7 +35,7 @@ type StoreCtx = {
   isAuthed: boolean;
   products: Product[];
   promos: Promo[];
-  customBrands: CustomBrandsMap;
+  customFacets: CustomFacetsMap;
   login: (user: string, pass: string) => boolean;
   logout: () => void;
   upsertProduct: (product: Product) => void;
@@ -43,7 +43,11 @@ type StoreCtx = {
   upsertPromo: (promo: Promo) => void;
   deletePromo: (id: string) => void;
   resetCatalog: () => void;
-  registerBrand: (category: ProductCategory, label: string) => FacetOption;
+  registerFacetOption: (
+    category: ProductCategory,
+    facetKey: string,
+    label: string,
+  ) => FacetOption;
 };
 
 const Ctx = createContext<StoreCtx | null>(null);
@@ -63,12 +67,12 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
   const [isAuthed, setAuthed] = useState(false);
   const [products, setProducts] = useState<Product[]>(seedProducts);
   const [promos, setPromos] = useState<Promo[]>(seedPromos as Promo[]);
-  const [customBrands, setCustomBrands] = useState<CustomBrandsMap>({});
+  const [customFacets, setCustomFacets] = useState<CustomFacetsMap>({});
 
   useEffect(() => {
     setProducts(readJson(PRODUCTS_KEY, seedProducts));
     setPromos(readJson(PROMOS_KEY, seedPromos as Promo[]));
-    setCustomBrands(readCustomBrands());
+    setCustomFacets(readCustomFacets());
     setAuthed(sessionStorage.getItem(AUTH_KEY) === "1");
     setReady(true);
   }, []);
@@ -125,20 +129,20 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
   const resetCatalog = useCallback(() => {
     localStorage.setItem(PRODUCTS_KEY, JSON.stringify(seedProducts));
     localStorage.setItem(PROMOS_KEY, JSON.stringify(seedPromos));
-    writeCustomBrands({});
+    writeCustomFacets({});
     setProducts(seedProducts);
     setPromos(seedPromos as Promo[]);
-    setCustomBrands({});
+    setCustomFacets({});
   }, []);
 
-  const registerBrand = useCallback(
-    (category: ProductCategory, label: string) => {
-      const { map, option } = addCustomBrand(customBrands, category, label);
-      writeCustomBrands(map);
-      setCustomBrands(map);
+  const registerFacetOption = useCallback(
+    (category: ProductCategory, facetKey: string, label: string) => {
+      const { map, option } = addCustomFacetOption(customFacets, category, facetKey, label);
+      writeCustomFacets(map);
+      setCustomFacets(map);
       return option;
     },
-    [customBrands],
+    [customFacets],
   );
 
   const value = useMemo(
@@ -147,7 +151,7 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       isAuthed,
       products,
       promos,
-      customBrands,
+      customFacets,
       login,
       logout,
       upsertProduct,
@@ -155,14 +159,14 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       upsertPromo,
       deletePromo,
       resetCatalog,
-      registerBrand,
+      registerFacetOption,
     }),
     [
       ready,
       isAuthed,
       products,
       promos,
-      customBrands,
+      customFacets,
       login,
       logout,
       upsertProduct,
@@ -170,7 +174,7 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       upsertPromo,
       deletePromo,
       resetCatalog,
-      registerBrand,
+      registerFacetOption,
     ],
   );
 
@@ -193,7 +197,7 @@ export function useLivePromos() {
   return { ready, promos: ready ? promos : (seedPromos as Promo[]) };
 }
 
-export function useCustomBrands() {
-  const { ready, customBrands } = useCatalogStore();
-  return { ready, customBrands: ready ? customBrands : {} };
+export function useCustomFacets() {
+  const { ready, customFacets } = useCatalogStore();
+  return { ready, customFacets: ready ? customFacets : {} };
 }

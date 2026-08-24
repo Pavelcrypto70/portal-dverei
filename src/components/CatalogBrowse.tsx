@@ -8,9 +8,9 @@ import { PriceRangeFilter } from "@/components/PriceRangeFilter";
 import { matchProductFilters } from "@/content/filters";
 import { categoryMeta, type Product, type ProductCategory } from "@/content/site";
 import { enrichFilters } from "@/lib/enrich-filters";
-import { mergeBrandFacets } from "@/lib/merge-brand-facets";
+import { mergeCustomFacets } from "@/lib/merge-brand-facets";
 import { saveCatalogReturn } from "@/lib/session-state";
-import { useCustomBrands, useLiveProducts } from "@/components/CatalogStore";
+import { useCustomFacets, useLiveProducts } from "@/components/CatalogStore";
 
 const PAGE_SIZE = 6;
 
@@ -27,7 +27,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { products } = useLiveProducts();
-  const { customBrands } = useCustomBrands();
+  const { customFacets } = useCustomFacets();
   const [filters, setFilters] = useState<Record<string, string>>(() =>
     queryToFilters(new URLSearchParams(searchParams.toString())),
   );
@@ -40,16 +40,16 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   );
 
   const facets = useMemo(() => {
-    const brandValues = categoryProducts
-      .map((p) => enrichFilters(p).brand)
-      .filter(Boolean) as string[];
-    return mergeBrandFacets(
-      category,
-      categoryMeta[category].facets,
-      customBrands,
-      brandValues,
-    );
-  }, [category, categoryProducts, customBrands]);
+    const byKey: Partial<Record<string, string[]>> = {};
+    for (const p of categoryProducts) {
+      const f = enrichFilters(p);
+      for (const [k, v] of Object.entries(f)) {
+        if (!v) continue;
+        (byKey[k] ??= []).push(v);
+      }
+    }
+    return mergeCustomFacets(category, categoryMeta[category].facets, customFacets, byKey);
+  }, [category, categoryProducts, customFacets]);
 
   useEffect(() => {
     setFilters(queryToFilters(new URLSearchParams(searchParams.toString())));
