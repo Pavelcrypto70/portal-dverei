@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { brand } from "@/content/site";
 import { useQuiz } from "@/components/QuizModal";
 
 export function StickyActions() {
@@ -21,14 +20,6 @@ export function StickyActions() {
       >
         Замер
       </Link>
-      <a
-        href={brand.whatsapp}
-        target="_blank"
-        rel="noreferrer"
-        className="btn btn-solid !min-h-11"
-      >
-        WhatsApp
-      </a>
     </div>
   );
 }
