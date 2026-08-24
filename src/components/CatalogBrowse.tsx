@@ -33,6 +33,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   );
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [query, setQuery] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const categoryProducts = useMemo(
     () => products.filter((p) => p.category === category),
@@ -121,10 +122,24 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
       <h1 className="display mt-3 text-3xl font-extrabold leading-tight sm:text-4xl md:text-6xl">{meta.title}</h1>
       <p className="mt-3 max-w-2xl text-[var(--mute)]">{meta.lead}</p>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[260px_1fr]">
-        <aside className="h-fit max-h-[calc(100svh-120px)] overflow-y-auto border-t border-[var(--ink)] pt-5 pr-2">
+      <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[260px_1fr] lg:gap-10">
+        <div className="lg:hidden">
+          <button
+            type="button"
+            className="btn btn-line w-full"
+            onClick={() => setFiltersOpen((v) => !v)}
+            aria-expanded={filtersOpen}
+          >
+            {filtersOpen ? "Скрыть фильтры" : "Фильтры и цена"}
+          </button>
+        </div>
+        <aside
+          className={`h-fit border-t border-[var(--ink)] pt-5 pr-2 lg:max-h-[calc(100svh-120px)] lg:overflow-y-auto ${
+            filtersOpen ? "block" : "hidden lg:block"
+          }`}
+        >
           <p className="text-sm font-bold">Фильтры</p>
-          <div className="mt-5 space-y-6">
+          <div className="mt-5 max-h-[55vh] space-y-6 overflow-y-auto pr-1 lg:max-h-none lg:overflow-visible">
             {facets.map((f) => (
               <div key={f.key}>
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">
