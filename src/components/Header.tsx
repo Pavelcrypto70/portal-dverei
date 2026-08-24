@@ -61,12 +61,12 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="wrap flex h-[72px] items-center gap-4">
+      <div className="wrap flex h-[64px] items-center gap-2 sm:h-[72px] sm:gap-4">
         <Link
           href="/"
           onClick={goHomeTop}
           aria-label="Наверх на главную"
-          className="shrink-0 text-[0.95rem] leading-none sm:text-[1.05rem] xl:text-[1.2rem]"
+          className="min-w-0 shrink text-[0.82rem] leading-none sm:text-[0.95rem] sm:leading-none xl:text-[1.2rem]"
         >
           <BrandMark
             variant="header"
@@ -131,7 +131,7 @@ export function Header() {
         </nav>
 
         <div
-          className={`relative z-10 ml-auto flex shrink-0 items-center gap-3 border-l pl-4 ${
+          className={`relative z-10 ml-auto flex shrink-0 items-center gap-2 border-l pl-3 sm:gap-3 sm:pl-4 ${
             ink ? "border-[var(--line)]" : "border-white/20"
           }`}
         >

@@ -118,7 +118,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   return (
     <div className="wrap py-10">
       <p className="kicker">Каталог</p>
-      <h1 className="display mt-3 text-4xl font-extrabold md:text-6xl">{meta.title}</h1>
+      <h1 className="display mt-3 text-3xl font-extrabold leading-tight sm:text-4xl md:text-6xl">{meta.title}</h1>
       <p className="mt-3 max-w-2xl text-[var(--mute)]">{meta.lead}</p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[260px_1fr]">
