@@ -15,13 +15,8 @@ export const priceFacet: FacetDef = {
   key: "price",
   label: "Цена",
   kind: "price",
-  options: [
-    all,
-    { value: "0-15000", label: "до 15 000 ₽" },
-    { value: "15000-30000", label: "15–30 000 ₽" },
-    { value: "30000-60000", label: "30–60 000 ₽" },
-    { value: "60000+", label: "от 60 000 ₽" },
-  ],
+  /** UI: от/до + ползунок; options не используются */
+  options: [],
 };
 
 export const stockFacet: FacetDef = {

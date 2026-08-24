@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
+import { PriceRangeFilter } from "@/components/PriceRangeFilter";
 import { matchProductFilters } from "@/content/filters";
 import { categoryMeta, type Product, type ProductCategory } from "@/content/site";
 import { enrichFilters } from "@/lib/enrich-filters";
@@ -59,21 +60,33 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
     saveCatalogReturn(`${pathname}${qs ? `?${qs}` : ""}`);
   }, [filters, pathname]);
 
+  const categoryProducts = useMemo(
+    () => products.filter((p) => p.category === category),
+    [products, category],
+  );
+
+  const priceBounds = useMemo(() => {
+    if (!categoryProducts.length) return { min: 0, max: 100000 };
+    const prices = categoryProducts.map((p) => p.price);
+    const min = Math.floor(Math.min(...prices) / 100) * 100;
+    const max = Math.ceil(Math.max(...prices) / 100) * 100;
+    return { min, max: Math.max(min + 100, max) };
+  }, [categoryProducts]);
+
   const list = useMemo(() => {
-    return products.filter((p) => {
-      if (p.category !== category) return false;
+    return categoryProducts.filter((p) => {
       const enriched = { ...p, filters: enrichFilters(p) };
       return matchProductFilters(enriched, filters);
     });
-  }, [category, filters, products]);
+  }, [categoryProducts, filters]);
 
   const shown = list.slice(0, visible);
   const hasMore = visible < list.length;
   const meta = categoryMeta[category];
 
-  const setFacet = (key: string, value: string) => {
+  const setFacet = (key: string, value: string | undefined) => {
     const next = { ...filters };
-    if (value === "all") delete next[key];
+    if (!value || value === "all") delete next[key];
     else next[key] = value;
     setFilters(next);
     setVisible(PAGE_SIZE);
@@ -95,25 +108,34 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--mute)]">
                   {f.label}
                 </p>
-                <div className="mt-2 space-y-1.5">
-                  {f.options.map((opt) => {
-                    const active = (filters[f.key] || "all") === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => setFacet(f.key, opt.value)}
-                        className={`block w-full text-left text-sm leading-snug transition ${
-                          active
-                            ? "font-semibold text-[var(--accent)]"
-                            : "text-[var(--ink-2)] hover:text-[var(--accent)]"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
+                {f.kind === "price" ? (
+                  <PriceRangeFilter
+                    minBound={priceBounds.min}
+                    maxBound={priceBounds.max}
+                    value={filters.price}
+                    onChange={(next) => setFacet("price", next)}
+                  />
+                ) : (
+                  <div className="mt-2 space-y-1.5">
+                    {f.options.map((opt) => {
+                      const active = (filters[f.key] || "all") === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setFacet(f.key, opt.value)}
+                          className={`block w-full text-left text-sm leading-snug transition ${
+                            active
+                              ? "font-semibold text-[var(--accent)]"
+                              : "text-[var(--ink-2)] hover:text-[var(--accent)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ))}
           </div>
