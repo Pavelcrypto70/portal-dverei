@@ -56,10 +56,11 @@ export function HeroSlider() {
 
       <div className="relative z-[1] flex h-full flex-col justify-end pb-16 pt-[96px]">
         <div className="wrap">
-          <p className="anim-up font-brand text-[clamp(3.4rem,12vw,8.5rem)] font-extrabold leading-[0.85] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+          <p className="anim-up text-[clamp(3.2rem,11vw,7.8rem)] leading-[0.88] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
             <BrandMark
+              variant="hero"
               mainClassName="text-[var(--brand)]"
-              tldClassName="text-[#9aa0a8]"
+              tldClassName="text-[var(--brand)]"
             />
           </p>
           <h1 className="anim-up anim-up-2 mt-5 max-w-[16ch] whitespace-pre-line text-[clamp(1.6rem,3.4vw,2.6rem)] font-semibold leading-[1.1] text-white">

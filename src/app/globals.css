@@ -28,6 +28,7 @@
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-brand: var(--font-brand);
+  --font-logo: var(--font-logo);
 }
 
 * {
@@ -93,6 +94,24 @@ textarea {
 .font-brand {
   font-family: var(--font-brand), "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.02em;
+}
+
+.font-logo {
+  font-family: var(--font-logo), "Nunito", system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  font-weight: 900;
+}
+
+/** Крупная надпись как в лого a_FuturaRound: жёлтая заливка + белая обводка */
+.brand-hero-mark {
+  font-family: var(--font-logo), "Nunito", system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  line-height: 0.9;
+  color: var(--brand);
+  -webkit-text-stroke: 0.045em #fff;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
 .btn {

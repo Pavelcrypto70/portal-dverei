@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Montserrat, Unbounded } from "next/font/google";
+import { Manrope, Montserrat, Nunito, Unbounded } from "next/font/google";
 import { SiteShell } from "@/components/SiteShell";
 import "./globals.css";
 
@@ -21,6 +21,13 @@ const brand = Montserrat({
   weight: ["600", "700", "800"],
 });
 
+/** Ближайший бесплатный аналог a_FuturaRound из логотипа */
+const logo = Nunito({
+  variable: "--font-logo",
+  subsets: ["latin", "cyrillic"],
+  weight: ["700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: {
     default: "ШИКАРДОРС.РФ — двери в Тюмени",
@@ -32,7 +39,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ru" className={`${display.variable} ${body.variable} ${brand.variable} h-full`}>
+    <html
+      lang="ru"
+      className={`${display.variable} ${body.variable} ${brand.variable} ${logo.variable} h-full`}
+    >
       <body className="shell min-h-full antialiased">
         <SiteShell>{children}</SiteShell>
       </body>
