@@ -72,7 +72,7 @@ export function Header() {
             variant="header"
             onLight={ink}
             mainClassName="text-[var(--brand)]"
-            tldClassName="text-[var(--brand)]"
+            tldClassName="text-[#9aa0a8]"
           />
         </Link>
 

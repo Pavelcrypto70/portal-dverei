@@ -108,10 +108,15 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 0.9;
-  color: var(--brand);
   -webkit-text-stroke: 0.045em #fff;
   paint-order: stroke fill;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+.brand-hero-mark > span:first-child {
+  color: var(--brand);
+}
+.brand-hero-mark > span:last-child {
+  color: #9aa0a8;
 }
 
 /** Лого в шапке — тот же шрифт и обводка, чуть тоньше */
@@ -120,10 +125,15 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1;
-  color: var(--brand);
   -webkit-text-stroke: 0.07em #fff;
   paint-order: stroke fill;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+.brand-header-mark > span:first-child {
+  color: var(--brand);
+}
+.brand-header-mark > span:last-child {
+  color: #9aa0a8;
 }
 .brand-header-mark--light {
   -webkit-text-stroke: 0.07em #1a1c1f;

@@ -60,7 +60,7 @@ export function HeroSlider() {
             <BrandMark
               variant="hero"
               mainClassName="text-[var(--brand)]"
-              tldClassName="text-[var(--brand)]"
+              tldClassName="text-[#9aa0a8]"
             />
           </p>
           <h1 className="anim-up anim-up-2 mt-5 max-w-[16ch] whitespace-pre-line text-[clamp(1.6rem,3.4vw,2.6rem)] font-semibold leading-[1.1] text-white">
