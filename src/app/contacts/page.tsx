@@ -30,11 +30,11 @@ export default function ContactsPage() {
         <p className="text-xl font-bold">
           <a href={brand.phoneMainHref}>{brand.phoneMain}</a>
         </p>
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
+        <div className="mt-10 grid gap-8 md:grid-cols-2">
           {salons.map((s, i) => (
             <article key={s.id}>
               <div className="relative mb-4 aspect-[4/3] overflow-hidden">
-                <MediaImage src={salonPhotos[i]} alt="" fill className="object-cover" sizes="33vw" />
+                <MediaImage src={salonPhotos[i % salonPhotos.length]} alt="" fill className="object-cover" sizes="50vw" />
               </div>
               <h2 className="text-xl font-semibold">{s.name}</h2>
               <p className="mt-2 text-sm text-[var(--mute)]">{s.address}</p>
