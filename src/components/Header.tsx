@@ -66,7 +66,7 @@ export function Header() {
           href="/"
           onClick={goHomeTop}
           aria-label="Наверх на главную"
-          className="display shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight drop-shadow-[0_1px_10px_rgba(0,0,0,0.35)] sm:text-[1.05rem] xl:text-[1.2rem]"
+          className="font-brand shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight drop-shadow-[0_1px_10px_rgba(0,0,0,0.35)] sm:text-[1.05rem] xl:text-[1.2rem]"
         >
           <BrandMark
             mainClassName="text-[var(--brand)]"

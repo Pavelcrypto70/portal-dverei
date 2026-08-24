@@ -19,7 +19,7 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="display inline-block text-4xl font-extrabold transition hover:opacity-90"
+            className="font-brand inline-block text-4xl font-extrabold transition hover:opacity-90"
             onClick={(e) => {
               if (pathname === "/" || pathname === "") {
                 e.preventDefault();

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Unbounded } from "next/font/google";
+import { Manrope, Montserrat, Unbounded } from "next/font/google";
 import { SiteShell } from "@/components/SiteShell";
 import "./globals.css";
 
@@ -15,6 +15,12 @@ const body = Manrope({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const brand = Montserrat({
+  variable: "--font-brand",
+  subsets: ["latin", "cyrillic"],
+  weight: ["600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: {
     default: "ШИКАРДОРС.РФ — двери в Тюмени",
@@ -26,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ru" className={`${display.variable} ${body.variable} h-full`}>
+    <html lang="ru" className={`${display.variable} ${body.variable} ${brand.variable} h-full`}>
       <body className="shell min-h-full antialiased">
         <SiteShell>{children}</SiteShell>
       </body>

@@ -27,6 +27,7 @@
   --color-signal: var(--signal);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-brand: var(--font-brand);
 }
 
 * {
@@ -87,6 +88,11 @@ textarea {
   font-family: var(--font-display), sans-serif;
   letter-spacing: -0.045em;
   line-height: 0.92;
+}
+
+.font-brand {
+  font-family: var(--font-brand), "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .btn {
