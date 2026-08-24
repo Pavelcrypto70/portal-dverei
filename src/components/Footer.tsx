@@ -59,16 +59,24 @@ export function Footer() {
         ))}
       </div>
       <div className="border-t border-white/10">
-        <div className="wrap grid gap-6 py-8 md:grid-cols-3">
-          {salons.map((s) => (
-            <div key={s.id}>
-              <p className="font-semibold">{s.name}</p>
-              <p className="mt-1 text-sm text-white/55">{s.address}</p>
-              <a href={s.phoneHref} className="mt-2 inline-block text-sm text-white/80">
-                {s.phone}
-              </a>
-            </div>
-          ))}
+        <div className="wrap py-8">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
+            {brand.city}
+          </p>
+          <div className="mt-5 grid gap-6 md:grid-cols-2">
+            {salons.map((s) => (
+              <div key={s.id}>
+                <p className="font-semibold">{s.name}</p>
+                {s.address && s.address !== s.name ? (
+                  <p className="mt-1 text-sm text-white/55">{s.address}</p>
+                ) : null}
+                <a href={s.phoneHref} className="mt-2 inline-block text-sm text-white/80">
+                  {s.phone}
+                </a>
+                {s.hours ? <p className="mt-1 text-sm text-white/45">{s.hours}</p> : null}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="wrap flex items-center justify-between gap-4 pb-8 text-xs text-white/45">
           <span>{footer.legal}</span>

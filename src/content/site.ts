@@ -33,7 +33,7 @@ export const salons = [
   {
     id: "permyakova",
     name: "ул. Пермякова, 86",
-    address: "ул. Пермякова, 86",
+    address: "",
     phone: "+7 (922) 043-92-43",
     phoneHref: "tel:+79220439243",
     hours: "Ежедневно 10:00–19:00, без перерывов и выходных",
