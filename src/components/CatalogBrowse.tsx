@@ -8,8 +8,9 @@ import { PriceRangeFilter } from "@/components/PriceRangeFilter";
 import { matchProductFilters } from "@/content/filters";
 import { categoryMeta, type Product, type ProductCategory } from "@/content/site";
 import { enrichFilters } from "@/lib/enrich-filters";
+import { mergeBrandFacets } from "@/lib/merge-brand-facets";
 import { saveCatalogReturn } from "@/lib/session-state";
-import { useLiveProducts } from "@/components/CatalogStore";
+import { useCustomBrands, useLiveProducts } from "@/components/CatalogStore";
 
 const PAGE_SIZE = 6;
 
@@ -26,11 +27,29 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { products } = useLiveProducts();
+  const { customBrands } = useCustomBrands();
   const [filters, setFilters] = useState<Record<string, string>>(() =>
     queryToFilters(new URLSearchParams(searchParams.toString())),
   );
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const facets = categoryMeta[category].facets;
+  const [query, setQuery] = useState("");
+
+  const categoryProducts = useMemo(
+    () => products.filter((p) => p.category === category),
+    [products, category],
+  );
+
+  const facets = useMemo(() => {
+    const brandValues = categoryProducts
+      .map((p) => enrichFilters(p).brand)
+      .filter(Boolean) as string[];
+    return mergeBrandFacets(
+      category,
+      categoryMeta[category].facets,
+      customBrands,
+      brandValues,
+    );
+  }, [category, categoryProducts, customBrands]);
 
   useEffect(() => {
     setFilters(queryToFilters(new URLSearchParams(searchParams.toString())));
@@ -60,11 +79,6 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
     saveCatalogReturn(`${pathname}${qs ? `?${qs}` : ""}`);
   }, [filters, pathname]);
 
-  const categoryProducts = useMemo(
-    () => products.filter((p) => p.category === category),
-    [products, category],
-  );
-
   const priceBounds = useMemo(() => {
     if (!categoryProducts.length) return { min: 0, max: 100000 };
     const prices = categoryProducts.map((p) => p.price);
@@ -74,11 +88,19 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
   }, [categoryProducts]);
 
   const list = useMemo(() => {
+    const q = query.trim().toLowerCase();
     return categoryProducts.filter((p) => {
       const enriched = { ...p, filters: enrichFilters(p) };
-      return matchProductFilters(enriched, filters);
+      if (!matchProductFilters(enriched, filters)) return false;
+      if (!q) return true;
+      const hay = `${p.name} ${p.slug} ${p.finish} ${p.style} ${p.short} ${p.badge ?? ""}`.toLowerCase();
+      return hay.includes(q);
     });
-  }, [categoryProducts, filters]);
+  }, [categoryProducts, filters, query]);
+
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [query]);
 
   const shown = list.slice(0, visible);
   const hasMore = visible < list.length;
@@ -144,6 +166,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
             className="mt-6 text-sm font-semibold text-[var(--mute)] underline-offset-4 hover:underline"
             onClick={() => {
               setFilters({});
+              setQuery("");
               setVisible(PAGE_SIZE);
               persistUrl({});
             }}
@@ -156,10 +179,19 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
         </aside>
 
         <div>
-          <p className="mb-6 text-sm text-[var(--mute)]">
-            Найдено: {list.length}
-            {list.length > PAGE_SIZE ? ` · показано ${shown.length}` : ""}
-          </p>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск товара…"
+              className="w-full max-w-md border border-[var(--line)] bg-[var(--paper)] px-3 py-2.5 text-sm outline-none focus:border-[var(--brand)]"
+            />
+            <p className="shrink-0 text-sm text-[var(--mute)]">
+              Найдено: {list.length}
+              {list.length > PAGE_SIZE ? ` · показано ${shown.length}` : ""}
+            </p>
+          </div>
           {shown.length ? (
             <>
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
@@ -194,6 +226,7 @@ export function CatalogBrowse({ category }: { category: ProductCategory }) {
                 className="btn btn-solid mt-5"
                 onClick={() => {
                   setFilters({});
+                  setQuery("");
                   persistUrl({});
                 }}
               >

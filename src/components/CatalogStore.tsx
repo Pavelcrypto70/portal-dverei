@@ -9,7 +9,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { products as seedProducts, promos as seedPromos, type Product } from "@/content/site";
+import {
+  products as seedProducts,
+  promos as seedPromos,
+  type Product,
+  type ProductCategory,
+} from "@/content/site";
 import {
   AUTH_KEY,
   PRODUCTS_KEY,
@@ -17,12 +22,20 @@ import {
   adminAuth,
   type Promo,
 } from "@/lib/admin-config";
+import {
+  addCustomBrand,
+  readCustomBrands,
+  writeCustomBrands,
+  type CustomBrandsMap,
+} from "@/lib/custom-brands";
+import type { FacetOption } from "@/content/filters";
 
 type StoreCtx = {
   ready: boolean;
   isAuthed: boolean;
   products: Product[];
   promos: Promo[];
+  customBrands: CustomBrandsMap;
   login: (user: string, pass: string) => boolean;
   logout: () => void;
   upsertProduct: (product: Product) => void;
@@ -30,6 +43,7 @@ type StoreCtx = {
   upsertPromo: (promo: Promo) => void;
   deletePromo: (id: string) => void;
   resetCatalog: () => void;
+  registerBrand: (category: ProductCategory, label: string) => FacetOption;
 };
 
 const Ctx = createContext<StoreCtx | null>(null);
@@ -49,10 +63,12 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
   const [isAuthed, setAuthed] = useState(false);
   const [products, setProducts] = useState<Product[]>(seedProducts);
   const [promos, setPromos] = useState<Promo[]>(seedPromos as Promo[]);
+  const [customBrands, setCustomBrands] = useState<CustomBrandsMap>({});
 
   useEffect(() => {
     setProducts(readJson(PRODUCTS_KEY, seedProducts));
     setPromos(readJson(PROMOS_KEY, seedPromos as Promo[]));
+    setCustomBrands(readCustomBrands());
     setAuthed(sessionStorage.getItem(AUTH_KEY) === "1");
     setReady(true);
   }, []);
@@ -109,9 +125,21 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
   const resetCatalog = useCallback(() => {
     localStorage.setItem(PRODUCTS_KEY, JSON.stringify(seedProducts));
     localStorage.setItem(PROMOS_KEY, JSON.stringify(seedPromos));
+    writeCustomBrands({});
     setProducts(seedProducts);
     setPromos(seedPromos as Promo[]);
+    setCustomBrands({});
   }, []);
+
+  const registerBrand = useCallback(
+    (category: ProductCategory, label: string) => {
+      const { map, option } = addCustomBrand(customBrands, category, label);
+      writeCustomBrands(map);
+      setCustomBrands(map);
+      return option;
+    },
+    [customBrands],
+  );
 
   const value = useMemo(
     () => ({
@@ -119,6 +147,7 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       isAuthed,
       products,
       promos,
+      customBrands,
       login,
       logout,
       upsertProduct,
@@ -126,12 +155,14 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       upsertPromo,
       deletePromo,
       resetCatalog,
+      registerBrand,
     }),
     [
       ready,
       isAuthed,
       products,
       promos,
+      customBrands,
       login,
       logout,
       upsertProduct,
@@ -139,6 +170,7 @@ export function CatalogStoreProvider({ children }: { children: ReactNode }) {
       upsertPromo,
       deletePromo,
       resetCatalog,
+      registerBrand,
     ],
   );
 
@@ -159,4 +191,9 @@ export function useLiveProducts() {
 export function useLivePromos() {
   const { ready, promos } = useCatalogStore();
   return { ready, promos: ready ? promos : (seedPromos as Promo[]) };
+}
+
+export function useCustomBrands() {
+  const { ready, customBrands } = useCatalogStore();
+  return { ready, customBrands: ready ? customBrands : {} };
 }

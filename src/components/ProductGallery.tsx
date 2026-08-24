@@ -1,24 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { productGalleries, productImages } from "@/content/site";
+import { productGalleries, productImages, type Product } from "@/content/site";
 import { MediaImage } from "@/components/MediaImage";
+import { productCover } from "@/lib/product-media";
 
-export function ProductGallery({ productId, name }: { productId: string; name: string }) {
+export function ProductGallery({ product }: { product: Product }) {
+  const cover = productCover(product);
   const images =
-    productGalleries[productId] ??
-    [productImages[productId]].filter(Boolean).concat([
-      "/media/fork-interior.png",
-      "/media/finish-oak.png",
-    ]);
+    product.imageUrl
+      ? [cover, ...(productGalleries[product.id] ?? []).filter((s) => s !== cover)].slice(0, 3)
+      : productGalleries[product.id] ??
+        [productImages[product.id]].filter(Boolean).concat([
+          "/media/fork-interior.png",
+          "/media/finish-oak.png",
+        ]);
   const [active, setActive] = useState(0);
+  const safe = images.length ? images : [cover];
 
   return (
     <div>
       <div className="relative min-h-[420px] overflow-hidden bg-[#d7dbe3] md:min-h-[560px]">
         <MediaImage
-          src={images[active]}
-          alt={name}
+          src={safe[active] ?? cover}
+          alt={product.name}
           fill
           priority
           className="object-cover transition duration-500"
@@ -26,7 +31,7 @@ export function ProductGallery({ productId, name }: { productId: string; name: s
         />
       </div>
       <div className="mt-3 grid grid-cols-3 gap-2">
-        {images.map((src, i) => (
+        {safe.map((src, i) => (
           <button
             key={src + i}
             type="button"

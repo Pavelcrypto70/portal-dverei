@@ -589,6 +589,8 @@ export type Product = {
   finish: string;
   style: string;
   short: string;
+  /** Своё фото (URL или data:image JPEG из админки) */
+  imageUrl?: string;
   /** Ключи фильтров каталога (значения из URL) */
   filters?: Record<string, string>;
   /** Явно отмеченные «похожие» — для админки позже */

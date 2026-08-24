@@ -46,7 +46,7 @@ export function ProductView({ slug }: { slug: string }) {
         <span className="text-[var(--ink)]">{product.name}</span>
       </div>
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        <ProductGallery productId={product.id} name={product.name} />
+        <ProductGallery product={product} />
         <div>
           {product.badge ? (
             <span className="bg-[var(--brand)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[var(--ink)]">

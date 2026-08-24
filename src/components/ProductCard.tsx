@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { MediaImage } from "@/components/MediaImage";
-import { formatPrice, productImages, type Product } from "@/content/site";
+import { formatPrice, type Product } from "@/content/site";
+import { productCover } from "@/lib/product-media";
 import { saveCatalogReturn } from "@/lib/session-state";
 
 export function ProductCard({ product }: { product: Product }) {
-  const img = productImages[product.id] ?? "/media/p-turin.png";
+  const img = productCover(product);
   const href = `/item?slug=${encodeURIComponent(product.slug)}`;
 
   const remember = () => {

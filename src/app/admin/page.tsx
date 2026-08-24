@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ProductCard } from "@/components/ProductCard";
+import { MediaImage } from "@/components/MediaImage";
 import { useCatalogStore } from "@/components/CatalogStore";
 import {
   catalogCategories,
@@ -11,6 +13,8 @@ import {
   type ProductCategory,
 } from "@/content/site";
 import { enrichFilters } from "@/lib/enrich-filters";
+import { mergeBrandFacets } from "@/lib/merge-brand-facets";
+import { fileToJpegDataUrl, productCover } from "@/lib/product-media";
 
 type Tab = "products" | "promos";
 
@@ -23,7 +27,7 @@ const emptyProduct = (): Product => ({
   finish: "",
   style: "",
   short: "",
-  filters: {},
+  filters: { stock: "in_stock" },
   relatedIds: [],
   kit: { leaf: 0, frame: 0, casings: 0, hardwareBase: 0 },
 });
@@ -35,15 +39,18 @@ export default function AdminPage() {
     isAuthed,
     products,
     promos,
+    customBrands,
     logout,
     upsertProduct,
     deleteProduct,
     upsertPromo,
     deletePromo,
     resetCatalog,
+    registerBrand,
   } = useCatalogStore();
   const [tab, setTab] = useState<Tab>("products");
   const [filterCat, setFilterCat] = useState<ProductCategory | "all">("all");
+  const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<Product | null>(null);
   const [promoEdit, setPromoEdit] = useState<(typeof promos)[0] | null>(null);
 
@@ -51,10 +58,15 @@ export default function AdminPage() {
     if (ready && !isAuthed) router.replace("/admin/login");
   }, [ready, isAuthed, router]);
 
-  const list = useMemo(
-    () => (filterCat === "all" ? products : products.filter((p) => p.category === filterCat)),
-    [products, filterCat],
-  );
+  const list = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return products.filter((p) => {
+      if (filterCat !== "all" && p.category !== filterCat) return false;
+      if (!q) return true;
+      const hay = `${p.name} ${p.slug} ${p.finish} ${p.style} ${p.short} ${p.badge ?? ""} ${categoryMeta[p.category].title}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [products, filterCat, search]);
 
   if (!ready || !isAuthed) {
     return <div className="p-10 text-[var(--mute)]">Проверка доступа…</div>;
@@ -75,7 +87,7 @@ export default function AdminPage() {
             type="button"
             className="btn btn-line"
             onClick={() => {
-              if (confirm("Сбросить каталог и акции к демо-данным?")) resetCatalog();
+              if (confirm("Сбросить каталог, акции и своих производителей к демо?")) resetCatalog();
             }}
           >
             Сброс
@@ -94,8 +106,8 @@ export default function AdminPage() {
       </div>
 
       <p className="mt-3 max-w-2xl text-sm text-[var(--mute)]">
-        Изменения сохраняются в этом браузере (localStorage). Для общей базы сотрудников позже
-        подключим сервер/CMS — интерфейс тот же.
+        Изменения в этом браузере (localStorage). Фото сжимаются в JPEG. Новый производитель
+        появляется в фильтрах каталога сразу после сохранения.
       </p>
 
       <div className="mt-8 flex gap-2 border-b border-[var(--line)]">
@@ -119,9 +131,16 @@ export default function AdminPage() {
       </div>
 
       {tab === "products" ? (
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
+        <div className="mt-6 grid gap-8 xl:grid-cols-[1fr_380px]">
           <div>
             <div className="flex flex-wrap items-center gap-3">
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Поиск товара…"
+                className="min-w-[200px] flex-1 border border-[var(--line)] bg-white px-3 py-2 text-sm outline-none focus:border-[var(--brand)]"
+              />
               <select
                 value={filterCat}
                 onChange={(e) => setFilterCat(e.target.value as ProductCategory | "all")}
@@ -142,17 +161,33 @@ export default function AdminPage() {
                 + Товар
               </button>
             </div>
+            <p className="mt-2 text-xs text-[var(--mute)]">Найдено: {list.length}</p>
             <div className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
               {list.map((p) => (
                 <div key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
-                  <div>
-                    <p className="font-semibold">{p.name}</p>
-                    <p className="text-xs text-[var(--mute)]">
-                      {categoryMeta[p.category].title} · {p.price.toLocaleString("ru-RU")} ₽ · /{p.slug}
-                    </p>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="relative h-12 w-10 shrink-0 overflow-hidden bg-[#d7dbe3]">
+                      <MediaImage
+                        src={productCover(p)}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="40px"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold">{p.name}</p>
+                      <p className="text-xs text-[var(--mute)]">
+                        {categoryMeta[p.category].title} · {p.price.toLocaleString("ru-RU")} ₽ · /{p.slug}
+                      </p>
+                    </div>
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" className="btn btn-line !min-h-9 !px-3" onClick={() => setEditing({ ...p })}>
+                    <button
+                      type="button"
+                      className="btn btn-line !min-h-9 !px-3"
+                      onClick={() => setEditing({ ...p })}
+                    >
                       Изменить
                     </button>
                     <button
@@ -167,6 +202,9 @@ export default function AdminPage() {
                   </div>
                 </div>
               ))}
+              {!list.length ? (
+                <p className="px-4 py-8 text-center text-sm text-[var(--mute)]">Ничего не найдено</p>
+              ) : null}
             </div>
           </div>
 
@@ -174,6 +212,8 @@ export default function AdminPage() {
             <ProductEditor
               product={editing}
               allProducts={products}
+              customBrands={customBrands}
+              onRegisterBrand={registerBrand}
               onChange={setEditing}
               onSave={() => {
                 const slug = editing.slug.trim() || editing.id;
@@ -211,7 +251,11 @@ export default function AdminPage() {
                     <p className="font-semibold">{p.title}</p>
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" className="btn btn-line !min-h-9 !px-3" onClick={() => setPromoEdit({ ...p })}>
+                    <button
+                      type="button"
+                      className="btn btn-line !min-h-9 !px-3"
+                      onClick={() => setPromoEdit({ ...p })}
+                    >
                       Изменить
                     </button>
                     <button
@@ -279,24 +323,43 @@ export default function AdminPage() {
 function ProductEditor({
   product,
   allProducts,
+  customBrands,
+  onRegisterBrand,
   onChange,
   onSave,
   onCancel,
 }: {
   product: Product;
   allProducts: Product[];
+  customBrands: ReturnType<typeof useCatalogStore>["customBrands"];
+  onRegisterBrand: ReturnType<typeof useCatalogStore>["registerBrand"];
   onChange: (p: Product) => void;
   onSave: () => void;
   onCancel: () => void;
 }) {
+  const [uploading, setUploading] = useState(false);
+  const [newBrand, setNewBrand] = useState("");
   const set = <K extends keyof Product>(key: K, value: Product[K]) =>
     onChange({ ...product, [key]: value });
 
   const setKit = (key: keyof Product["kit"], value: number) =>
-    onChange({ ...product, kit: { ...product.kit, [key]: value }, price: key === "leaf" ? value : product.price });
+    onChange({
+      ...product,
+      kit: { ...product.kit, [key]: value },
+      price: key === "leaf" ? value : product.price,
+    });
 
   const related = new Set(product.relatedIds ?? []);
-  const facets = categoryMeta[product.category]?.facets ?? [];
+  const brandValues = allProducts
+    .filter((p) => p.category === product.category)
+    .map((p) => enrichFilters(p).brand)
+    .filter(Boolean) as string[];
+  const facets = mergeBrandFacets(
+    product.category,
+    categoryMeta[product.category]?.facets ?? [],
+    customBrands,
+    brandValues,
+  );
   const currentFilters = { ...enrichFilters(product), ...(product.filters ?? {}) };
 
   const setFilter = (key: string, value: string) => {
@@ -305,12 +368,80 @@ function ProductEditor({
     onChange({ ...product, filters: next });
   };
 
+  const onPickPhoto = async (file: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Нужен файл изображения");
+      return;
+    }
+    setUploading(true);
+    try {
+      const dataUrl = await fileToJpegDataUrl(file);
+      if (dataUrl.length > 1_400_000) {
+        alert("Фото слишком тяжёлое даже после сжатия. Возьмите файл поменьше.");
+        return;
+      }
+      set("imageUrl", dataUrl);
+    } catch {
+      alert("Не удалось обработать фото");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
-    <div className="h-fit max-h-[80vh] overflow-y-auto border border-[var(--line)] bg-[var(--paper)] p-4">
+    <div className="h-fit max-h-[85vh] overflow-y-auto border border-[var(--line)] bg-[var(--paper)] p-4">
       <p className="text-sm font-bold">Редактор товара</p>
-      <div className="mt-3 grid gap-2">
+
+      <p className="mt-4 text-xs font-bold uppercase tracking-wide text-[var(--mute)]">
+        Как будет выглядеть карточка
+      </p>
+      <div className="mt-2 max-w-[240px]">
+        <ProductCard product={product} />
+      </div>
+
+      <div className="mt-5 grid gap-2">
+        <p className="text-xs font-bold uppercase tracking-wide text-[var(--mute)]">Фото</p>
+        <div className="relative aspect-[4/5] max-w-[180px] overflow-hidden bg-[#d7dbe3]">
+          <MediaImage
+            src={productCover(product)}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="180px"
+          />
+        </div>
+        <label className="btn btn-line !min-h-10 cursor-pointer text-sm">
+          {uploading ? "Сжимаем…" : "Загрузить фото"}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            disabled={uploading}
+            onChange={(e) => {
+              void onPickPhoto(e.target.files?.[0] ?? null);
+              e.target.value = "";
+            }}
+          />
+        </label>
         <input
           className="border border-[var(--line)] px-3 py-2 text-sm"
+          value={product.imageUrl?.startsWith("data:") ? "" : (product.imageUrl ?? "")}
+          onChange={(e) => set("imageUrl", e.target.value.trim() || undefined)}
+          placeholder="или URL фото https://…"
+        />
+        {product.imageUrl ? (
+          <button
+            type="button"
+            className="text-left text-xs font-semibold text-[var(--mute)] underline"
+            onClick={() => set("imageUrl", undefined)}
+          >
+            Убрать своё фото (вернуть демо)
+          </button>
+        ) : null}
+
+        <input
+          className="mt-2 border border-[var(--line)] px-3 py-2 text-sm"
           value={product.name}
           onChange={(e) => set("name", e.target.value)}
           placeholder="Название"
@@ -328,7 +459,7 @@ function ProductEditor({
             onChange({
               ...product,
               category: e.target.value as ProductCategory,
-              filters: {},
+              filters: { stock: product.filters?.stock ?? "in_stock" },
             })
           }
         >
@@ -388,13 +519,13 @@ function ProductEditor({
           Фильтры каталога
         </p>
         <p className="text-[11px] text-[var(--mute)]">
-          Отметьте, в какие фильтры попадает товар. Цена считается автоматически.
+          Отметьте фасеты. Цена — ползунком на сайте. Новый производитель — ниже.
         </p>
         <div className="space-y-3 rounded border border-[var(--line)] p-3">
           {facets
             .filter((f) => f.key !== "price")
             .map((facet) => (
-              <label key={facet.key} className="grid gap-1 text-xs">
+              <div key={facet.key} className="grid gap-1 text-xs">
                 <span className="font-semibold text-[var(--ink)]">{facet.label}</span>
                 <select
                   className="border border-[var(--line)] px-2 py-1.5 text-sm"
@@ -407,7 +538,30 @@ function ProductEditor({
                     </option>
                   ))}
                 </select>
-              </label>
+                {facet.key === "brand" ? (
+                  <div className="mt-1 flex gap-2">
+                    <input
+                      className="min-w-0 flex-1 border border-[var(--line)] px-2 py-1.5 text-sm"
+                      value={newBrand}
+                      onChange={(e) => setNewBrand(e.target.value)}
+                      placeholder="Новый производитель"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-line !min-h-9 shrink-0 !px-3 text-xs"
+                      onClick={() => {
+                        const label = newBrand.trim();
+                        if (!label) return;
+                        const opt = onRegisterBrand(product.category, label);
+                        setFilter("brand", opt.value);
+                        setNewBrand("");
+                      }}
+                    >
+                      + Добавить
+                    </button>
+                  </div>
+                ) : null}
+              </div>
             ))}
         </div>
 
