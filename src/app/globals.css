@@ -244,6 +244,21 @@ textarea {
   margin-bottom: 2rem;
 }
 
+@media (max-width: 640px) {
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .section-head h2 {
+    max-width: none;
+    font-size: clamp(1.65rem, 7vw, 2.2rem);
+  }
+  .section-head p {
+    max-width: none;
+  }
+}
+
 .section-head h2 {
   margin: 0;
   max-width: 14ch;
