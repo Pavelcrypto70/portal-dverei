@@ -41,9 +41,11 @@ export default function HomePage() {
                     className="object-cover transition duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,10,14,0.1),rgba(8,10,14,0.78))]" />
-                  <div className="absolute inset-x-0 bottom-0 p-7 text-white md:p-9">
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8 lg:p-9">
                     <p className="text-sm text-white/70">{c.priceFrom}</p>
-                    <h3 className="display mt-1 text-4xl font-bold md:text-6xl">{c.title}</h3>
+                    <h3 className="display mt-1 max-w-full text-[clamp(1.85rem,3.6vw,3.15rem)] font-bold leading-[0.98] tracking-[-0.03em]">
+                      {c.title}
+                    </h3>
                     <p className="mt-3 max-w-sm text-sm text-white/80 md:text-base">{c.text}</p>
                     <span className="mt-5 inline-block text-sm font-semibold underline-offset-4 group-hover:underline">
                       Перейти →
