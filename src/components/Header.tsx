@@ -66,11 +66,13 @@ export function Header() {
           href="/"
           onClick={goHomeTop}
           aria-label="Наверх на главную"
-          className="font-brand shrink-0 text-[0.95rem] font-extrabold leading-none tracking-tight drop-shadow-[0_1px_10px_rgba(0,0,0,0.35)] sm:text-[1.05rem] xl:text-[1.2rem]"
+          className="shrink-0 text-[0.95rem] leading-none sm:text-[1.05rem] xl:text-[1.2rem]"
         >
           <BrandMark
+            variant="header"
+            onLight={ink}
             mainClassName="text-[var(--brand)]"
-            tldClassName="text-[#9aa0a8]"
+            tldClassName="text-[var(--brand)]"
           />
         </Link>
 
