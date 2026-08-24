@@ -16,6 +16,8 @@ export const brand = {
   email: "hello@shikardors.ru",
   whatsapp: "https://wa.me/79220439243",
   telegram: "https://t.me/shikardors",
+  vk: "https://vk.ru/shikardoorss",
+  instagram: "https://www.instagram.com/shikardoors.tmn",
   /** Главный номер — салон на Пермякова */
   phoneMain: "+7 (922) 043-92-43",
   phoneMainHref: "tel:+79220439243",
