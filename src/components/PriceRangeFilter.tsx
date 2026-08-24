@@ -112,13 +112,13 @@ export function PriceRangeFilter({ minBound, maxBound, value, onChange }: Props)
       </div>
 
       <div
-        className="relative h-7 pt-2"
+        className="price-range relative h-8"
         onPointerUp={() => commit(from, to)}
         onTouchEnd={() => commit(from, to)}
       >
-        <div className="absolute top-1/2 right-0 left-0 h-1 -translate-y-1/2 rounded-full bg-[var(--line)]" />
+        <div className="price-range-rail" />
         <div
-          className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--brand)]"
+          className="price-range-fill"
           style={{ left: `${leftPct}%`, right: `${100 - rightPct}%` }}
         />
         <input
@@ -134,7 +134,7 @@ export function PriceRangeFilter({ minBound, maxBound, value, onChange }: Props)
             setFrom(next);
             setFromText(String(next));
           }}
-          className="price-range-thumb absolute inset-0 z-[2] w-full appearance-none bg-transparent"
+          className="price-range-thumb"
           style={{ zIndex: from > safeMin + span * 0.5 ? 4 : 2 }}
         />
         <input
@@ -150,7 +150,7 @@ export function PriceRangeFilter({ minBound, maxBound, value, onChange }: Props)
             setTo(next);
             setToText(String(next));
           }}
-          className="price-range-thumb absolute inset-0 z-[3] w-full appearance-none bg-transparent"
+          className="price-range-thumb"
           style={{ zIndex: to < safeMin + span * 0.5 ? 4 : 3 }}
         />
       </div>
