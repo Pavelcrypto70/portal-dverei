@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Manrope, Montserrat, Nunito, Unbounded } from "next/font/google";
+import localFont from "next/font/local";
+import { Manrope, Montserrat, Unbounded } from "next/font/google";
 import { SiteShell } from "@/components/SiteShell";
 import "./globals.css";
 
@@ -21,11 +22,12 @@ const brand = Montserrat({
   weight: ["600", "700", "800"],
 });
 
-/** Ближайший бесплатный аналог a_FuturaRound из логотипа */
-const logo = Nunito({
+/** Шрифт логотипа из макета: a_FuturaRound Bold */
+const logo = localFont({
+  src: "../fonts/a-futuraround-bold.ttf",
   variable: "--font-logo",
-  subsets: ["latin", "cyrillic"],
-  weight: ["700", "800", "900"],
+  weight: "700",
+  display: "swap",
 });
 
 export const metadata: Metadata = {

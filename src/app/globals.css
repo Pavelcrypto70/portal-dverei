@@ -97,15 +97,15 @@ textarea {
 }
 
 .font-logo {
-  font-family: var(--font-logo), "Nunito", system-ui, sans-serif;
+  font-family: var(--font-logo), "a_FuturaRound", system-ui, sans-serif;
   letter-spacing: 0.01em;
-  font-weight: 900;
+  font-weight: 700;
 }
 
-/** Крупная надпись как в лого a_FuturaRound: жёлтая заливка + белая обводка */
+/** Крупная надпись как в лого: a_FuturaRound + белая обводка */
 .brand-hero-mark {
-  font-family: var(--font-logo), "Nunito", system-ui, sans-serif;
-  font-weight: 900;
+  font-family: var(--font-logo), "a_FuturaRound", system-ui, sans-serif;
+  font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 0.9;
   color: var(--brand);
