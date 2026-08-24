@@ -452,7 +452,7 @@ export const home = {
   stats: [
     { value: "12 000+", label: "установок в год" },
     { value: "11 лет", label: "на рынке" },
-    { value: "3 салона", label: "с образцами" },
+    { value: "2 салона", label: "с образцами" },
     { value: "96%", label: "рекомендуют" },
   ],
 };
