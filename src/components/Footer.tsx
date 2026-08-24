@@ -19,7 +19,7 @@ export function Footer() {
         <div>
           <Link
             href="/"
-            className="font-brand inline-block text-4xl font-extrabold transition hover:opacity-90"
+            className="inline-block text-4xl font-extrabold transition hover:opacity-90"
             onClick={(e) => {
               if (pathname === "/" || pathname === "") {
                 e.preventDefault();
@@ -30,7 +30,11 @@ export function Footer() {
               requestAnimationFrame(goTop);
             }}
           >
-            <BrandMark mainClassName="text-[var(--brand)]" tldClassName="text-[#9aa0a8]" />
+            <BrandMark
+              variant="header"
+              mainClassName="text-[var(--brand)]"
+              tldClassName="text-[#9aa0a8]"
+            />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{footer.about}</p>
           <a href={brand.phoneMainHref} className="mt-6 inline-block text-xl font-bold">

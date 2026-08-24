@@ -25,9 +25,9 @@
   --color-paper: var(--paper);
   --color-accent: var(--accent);
   --color-signal: var(--signal);
-  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-body);
   --font-body: var(--font-body);
-  --font-brand: var(--font-brand);
   --font-logo: var(--font-logo);
 }
 
@@ -43,8 +43,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--bg);
-  font-family: var(--font-body), system-ui, sans-serif;
-  font-feature-settings: "ss01" on;
+  font-family: var(--font-body), "Montserrat", system-ui, sans-serif;
 }
 
 body::before {
@@ -86,14 +85,14 @@ textarea {
 }
 
 .display {
-  font-family: var(--font-display), sans-serif;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
+  font-family: var(--font-body), "Montserrat", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 
 .font-brand {
-  font-family: var(--font-brand), "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body), "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.01em;
 }
 
 .font-logo {
