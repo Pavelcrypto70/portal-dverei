@@ -30,7 +30,7 @@ export default function ContactsPage() {
         <p className="text-xl font-bold">
           <a href={brand.phoneMainHref}>{brand.phoneMain}</a>
         </p>
-        <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--mute)]">
+        <p className="mt-8 text-2xl font-bold tracking-wide text-[var(--brand)] md:text-3xl">
           {brand.city}
         </p>
         <div className="mt-5 grid gap-8 md:grid-cols-2">

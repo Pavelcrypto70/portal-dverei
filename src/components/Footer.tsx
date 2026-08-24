@@ -60,7 +60,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="wrap py-8">
-          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
+          <p className="text-lg font-bold tracking-wide text-[var(--brand)] sm:text-xl">
             {brand.city}
           </p>
           <div className="mt-5 grid gap-6 md:grid-cols-2">
