@@ -98,8 +98,32 @@ export function enrichFilters(p: Product): Record<string, string> {
     }
   }
 
-  if (p.category === "hardware" && !f.cat) {
-    f.cat = /lock|замок/i.test(p.id + p.name) ? "locks" : "handles";
+  if (p.category === "hardware") {
+    if (!f.cat) {
+      if (/квадрат|square/i.test(p.name + p.style)) f.cat = "square_rosette";
+      else if (/раздвиж|sliding/i.test(p.name + p.style)) f.cat = "sliding_handles";
+      else if (/бабочк|butterfly/i.test(p.name + p.style + p.id)) f.cat = "butterfly_hinges";
+      else if (/скрыт.*петл|concealed.*hinge/i.test(p.name + p.style)) f.cat = "concealed_hinges";
+      else if (/карточн|card/i.test(p.name + p.style)) f.cat = "card_hinges";
+      else if (/защелк|latch|магнит/i.test(p.name + p.style)) f.cat = "magnetic_latches";
+      else if (/порог|threshold/i.test(p.name + p.style)) f.cat = "auto_thresholds";
+      else if (/огранич|stop/i.test(p.name + p.style)) f.cat = "concealed_stops";
+      else if (/ручка|handle/i.test(p.name + p.id)) f.cat = "round_rosette";
+      else f.cat = "round_rosette";
+    }
+    if (!f.color) {
+      if (/матов.*золот|matte.?gold/i.test(p.finish)) f.color = "matte_gold";
+      else if (/глянц.*золот|gloss.?gold/i.test(p.finish)) f.color = "gloss_gold";
+      else if (/матов.*хром|matte.?chrome/i.test(p.finish)) f.color = "matte_chrome";
+      else if (/глянц.*хром|gloss.?chrome/i.test(p.finish)) f.color = "gloss_chrome";
+      else if (/графит|graphite/i.test(p.finish)) f.color = "graphite";
+      else if (/бронз|bronze/i.test(p.finish)) f.color = "bronze";
+      else if (/бел|white/i.test(p.finish)) f.color = "white";
+      else if (/чёрн|черн|black/i.test(p.finish)) f.color = "black";
+      else f.color = "matte_chrome";
+    }
+    if (!f.brand) f.brand = "morelli";
+    if (!f.stock) f.stock = "in_stock";
   }
 
   return f;
